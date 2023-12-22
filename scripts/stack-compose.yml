@@ -1,0 +1,19 @@
+version: "3.5"
+
+networks:
+  servicenet:
+    driver: overlay
+    ipam:
+      config:
+        -
+          subnet: 10.0.9.0/24
+
+services:
+  python-dev:
+    image: python-dev:1.0.15
+    volumes:
+      - "../source:/usr/src/app"
+    networks:
+      - servicenet
+    deploy:
+      replicas: 1
