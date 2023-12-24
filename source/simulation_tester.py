@@ -22,7 +22,8 @@ def send_simulation_initial_data(process, data):
 def send_simulation_data(process, simulation):
     process.stdin.write(f"{simulation.speed}\n")
     for bike in simulation.bikes:
-        process.stdin.write(f"{bike}\n")
+        x, y, a = bike
+        process.stdin.write(f"{x} {y} {a}\n")
     process.stdin.flush()
 
 
@@ -104,7 +105,6 @@ def main():
         line = process.stderr.readline()
         if not line:
             break
-        # the real code does filtering here
         print(f"   {line.rstrip()}")
 
     for pipe in [process.stdin, process.stdout, process.stderr]:

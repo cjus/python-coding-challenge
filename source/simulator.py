@@ -24,8 +24,11 @@ class Simulator:
             list(simulation_data["lanes"][3]),
         ]
         self.max_iterations = len(self.lanes[0])
-        self.initial_bikes = simulation_data["bikes"]
-        self.bikes = simulation_data["bikes"]
+        bikes = []
+        for bike in simulation_data["bikes"]:
+            bikes.append([int(j) for j in bike.split()])
+        self.initial_bikes = bikes.copy()
+        self.bikes = bikes.copy()
         self.last_command = ""
 
     def reset(self):
@@ -63,7 +66,7 @@ class Simulator:
 
         bike_index = 1
         for bike in self.bikes:
-            x, y, a = [int(j) for j in bike.split()]
+            x, y, a = bike
             if a == 0 or a == 1:
                 shadow_lanes[y][x] = f"{bike_index}"
             bike_index = bike_index + 1
@@ -81,7 +84,7 @@ class Simulator:
         """Process a single command or iteration of the simulation"""
         bike_data = []
         for bike in self.bikes:
-            bike_data.append([int(j) for j in bike.split()])
+            bike_data.append(bike)
         len_bike_data = len(bike_data)
 
         if self.remaining_bikes == 0:
@@ -144,6 +147,6 @@ class Simulator:
                 bike_data[b][2] = 0
 
             bike_data[b][0] = x
-            self.bikes[b] = f"{x} {y} {a}"
+            self.bikes[b] = [x, y, a].copy()
         self.last_command = command
         return (False, self.success_bikes)
