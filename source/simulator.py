@@ -38,10 +38,13 @@ class Simulator:
 
     def render(self, iteration, command):
         """Render function to output the current state of the simulation"""
-        if iteration == 0:
+        if iteration == -1:
             print(f"Initial State")
         else:
-            print(f"Iteration: {iteration} | After: {command}")
+            print(f"Iteration: {iteration} ({command})")
+
+        print(f"Speed: {self.speed}")
+
         for i in range(self.max_iterations):
             value = "{:02d}".format(i)
             print(value[0], end="")
@@ -76,82 +79,71 @@ class Simulator:
 
     def process(self, command):
         """Process a single command or iteration of the simulation"""
-        last_command = self.last_command
-        remaining_bikes = self.remaining_bikes
-        speed = self.speed
-        success_bikes = self.success_bikes
-
         bike_data = []
         for bike in self.bikes:
             bike_data.append([int(j) for j in bike.split()])
+        len_bike_data = len(bike_data)
 
-        if remaining_bikes == 0:
-            return (True, success_bikes)
+        if self.remaining_bikes == 0:
+            return (True, self.success_bikes)
 
         if command == "SPEED":
-            speed = speed + 1
-            self.speed = speed
+            self.speed = self.speed + 1
         elif command == "SLOW":
-            speed = speed - 1
-            if speed < 0:
-                speed = 0
-            self.speed = speed
+            self.speed = self.speed - 1
+            if self.speed < 0:
+                self.speed = 0
         elif command == "JUMP":
             pass
         elif command == "WAIT":
             pass
         elif command == "UP":
             first_active_bike = -1
-            for b in range(len(bike_data)):
+            for b in range(len_bike_data):
                 if bike_data[b][2]:
                     first_active_bike = b
                     break
             if first_active_bike > -1:
                 if bike_data[first_active_bike][1] > 0:
-                    for b in range(len(bike_data)):
+                    for b in range(len_bike_data):
                         if bike_data[b][2]:
                             bike_data[b][1] = bike_data[b][1] - 1
         elif command == "DOWN":
             last_active_bike = -1
-            for b in reversed(range(len(bike_data))):
+            for b in reversed(range(len_bike_data)):
                 if bike_data[b][2]:
                     last_active_bike = b
                     break
             if last_active_bike > -1:
                 if bike_data[last_active_bike][1] < len(self.lanes) - 1:
-                    for b in range(len(bike_data)):
+                    for b in range(len_bike_data):
                         if bike_data[b][2]:
                             bike_data[b][1] = bike_data[b][1] + 1
 
-        for b in range(len(bike_data)):
+        for b in range(len_bike_data):
             x, y, a = bike_data[b]
             if a == 0:
                 continue
-            print(f"Path({b} {x}-{x+speed+1}): [", end="")
-            for j in range(x, x + speed + 1):
+
+            for j in range(x, x + self.speed + 1):
                 if j >= self.max_iterations:
                     break
-                print(f"{self.lanes[y][j]}", end="")
-                if self.lanes[y][j] == "0" and last_command != "JUMP":
-                    remaining_bikes = remaining_bikes - 1
+                if self.lanes[y][j] == "0" and self.last_command != "JUMP":
+                    self.remaining_bikes = self.remaining_bikes - 1
                     a = 0
                     x = j
                     break
 
-            print("]")
-            print(f"Speed: {speed}")
             if a != 0:
-                x = x + speed
+                x = x + self.speed
                 if x >= self.max_iterations:
                     x = self.max_iterations - 1
-                    success_bikes = success_bikes + 1
-                    remaining_bikes = remaining_bikes - 1
+                    self.success_bikes = self.success_bikes + 1
+                    self.remaining_bikes = self.remaining_bikes - 1
             else:
                 bike_data[b][2] = 0
 
             bike_data[b][0] = x
-            self.success_bikes = success_bikes
-            self.remaining_bikes = remaining_bikes
             self.bikes[b] = f"{x} {y} {a}"
         self.last_command = command
-        return (False, 0)
+        return (False, self.success_bikes)

@@ -21,55 +21,98 @@ def debug(statement):
     print(statement, file=sys.stderr, flush=True)
 
 
-debug(f"main.py invoked")
-m = int(input())  # the amount of motorbikes to control
-v = int(input())  # the minimum amount of motorbikes that must survive
+class BikeAI:
+    commands = [
+        "SPEED",
+        "SPEED",
+        "SPEED",
+        "SLOW",
+        "JUMP",
+        "WAIT",
+        "WAIT",
+        "SPEED",
+        "SPEED",
+        "SPEED",
+        "SPEED",
+    ]
+    command_index = 0
 
-debug(f"m: {m}")
-debug(f"v: {v}")
+    def __init__(self, data):
+        self.total_bikes = data["total_bikes"]
+        self.required_bikes = data["required_bikes"]
+        self.lanes = data["lanes"]
+        self.speed = 0
 
-# L0 to L3 are lanes of the road. A dot character . represents a safe
-# space, a zero 0 represents a hole in the road.
-l0 = input()
-l1 = input()
-l2 = input()
-l3 = input()
+    def process(self, data):
+        self.speed = data["speed"]
+        self.bikes = data["bikes"]
 
-debug(f"l0 parse: {list(l0)}")
+        command = ""
+        if self.command_index < len(self.commands):
+            command = self.commands[self.command_index]
+            self.command_index = self.command_index + 1
 
-debug(f"l0 {l0}")
-debug(f"l1 {l1}")
-debug(f"l2 {l2}")
-debug(f"l3 {l3}")
-
-s = int(input())  # the motorbikes' speed
-for i in range(m):
-    # x: x coordinate of the motorbike
-    # y: y coordinate of the motorbike
-    # a: indicates whether the motorbike is activated "1" or detroyed "0"
-    x, y, a = [int(j) for j in input().split()]
-    debug(f"x: {x}, y: {y}, a: {a}")
-
-# # game loop
-# while True:
-#     print(f"l0 {l0}", file=sys.stderr, flush=True)
-#     print(f"l1 {l1}", file=sys.stderr, flush=True)
-#     print(f"l2 {l2}", file=sys.stderr, flush=True)
-#     print(f"l3 {l3}", file=sys.stderr, flush=True)
-#     print(f"-------------", file=sys.stderr, flush=True)
-#     s = int(input())  # the motorbikes' speed
-#     for i in range(m):
-#         # x: x coordinate of the motorbike
-#         # y: y coordinate of the motorbike
-#         # a: indicates whether the motorbike is activated "1" or detroyed "0"
-#         x, y, a = [int(j) for j in input().split()]
-
-#     # Write an action using print
-#     # To debug: print("Debug messages...", file=sys.stderr, flush=True)
+        return command
 
 
-#     # A single line containing one of 6 keywords: SPEED, SLOW, JUMP, WAIT, UP, DOWN.
-#     print("SPEED")
+def main():
+    debug("Start of simulation")
 
-output("SPEED")
-debug(f"main.py closed")
+    m = int(input())  # the amount of motorbikes to control
+    v = int(input())  # the minimum amount of motorbikes that must survive
+
+    debug(f"m: {m}")
+    debug(f"v: {v}")
+
+    # L0 to L3 are lanes of the road. A dot character . represents a safe
+    # space, a zero 0 represents a hole in the road.
+    l0 = input()
+    l1 = input()
+    l2 = input()
+    l3 = input()
+
+    sim_data = {
+        "total_bikes": m,
+        "required_bikes": v,
+        "lanes": [
+            list(l0),
+            list(l1),
+            list(l2),
+            list(l3),
+        ],
+    }
+
+    bike_ai = BikeAI(sim_data)
+
+    # game loop
+    while True:
+        active_bikes = False
+        s = int(input())  # the motorbikes' speed
+
+        run_data = {"speed": s, "bikes": []}
+
+        for i in range(m):
+            # x: x coordinate of the motorbike
+            # y: y coordinate of the motorbike
+            # a: indicates whether the motorbike is activated "1" or detroyed "0"
+            x, y, a = [int(j) for j in input().split()]
+            debug(f"x: {x}, y: {y}, a: {a}")
+            run_data["bikes"].append([x, y, a])
+            if a > 0:
+                active_bikes = True
+        if not active_bikes:
+            debug("Exit: no more active_bikes")
+            break
+
+        command = bike_ai.process(run_data)
+        if command == "":
+            debug("Exit: end of commands")
+            break
+        else:
+            output(command)
+
+    debug("End of simulation")
+
+
+if __name__ == "__main__":
+    main()
