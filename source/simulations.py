@@ -4,9 +4,9 @@
 def simulation1():
     return {
         "name": "Sim 1: One lonley hole",
-        "total_bikes": "1",
-        "required": "1",
-        "speed": "0",
+        "total_bikes": 1,
+        "required": 1,
+        "speed": 0,
         "lanes": [
             "..................................",
             "..................................",
@@ -14,7 +14,7 @@ def simulation1():
             "..................................",
         ],
         "bikes": [
-            "0 2 1",
+            [0, 2, 1]
         ],
         "commands": [
             "SPEED",
@@ -35,9 +35,9 @@ def simulation1():
 def simulation2():
     return {
         "name": "Sim 2",
-        "total_bikes": "2",
-        "required": "1",
-        "speed": "0",
+        "total_bikes": 2,
+        "required": 1,
+        "speed": 0,
         "lanes": [
             "....0.............................",
             "................0.................",
@@ -45,8 +45,8 @@ def simulation2():
             "............0.....................",
         ],
         "bikes": [
-            "0 0 1",
-            "0 3 1",
+            [0, 0, 1],
+            [0, 3, 1],
         ],
         "commands": [
             "SPEED",
@@ -57,9 +57,9 @@ def simulation2():
 def simulation3():
     return {
         "name": "Sim 3: Jump into hole",
-        "total_bikes": "1",
-        "required": "1",
-        "speed": "0",
+        "total_bikes": 1,
+        "required": 1,
+        "speed": 0,
         "lanes": [
             "......0...........................",
             "..................................",
@@ -67,7 +67,7 @@ def simulation3():
             "..................................",
         ],
         "bikes": [
-            "0 0 1",
+            [0, 0, 1],
         ],
         "commands": [
             "SPEED",
@@ -81,9 +81,9 @@ def simulation3():
 def simulation4():
     return {
         "name": "Sim 4: Jump over hole",
-        "total_bikes": "1",
-        "required": "1",
-        "speed": "0",
+        "total_bikes": 1,
+        "required": 1,
+        "speed": 0,
         "lanes": [
             "......0...........................",
             "..................................",
@@ -91,7 +91,7 @@ def simulation4():
             "..................................",
         ],
         "bikes": [
-            "0 0 1",
+            [0, 0, 1],
         ],
         "commands": [
             "SPEED",
@@ -103,9 +103,9 @@ def simulation4():
 def simulation5():
     return {
         "name": "Sim 5: Jump over hole",
-        "total_bikes": "1",
-        "required": "1",
-        "speed": "0",
+        "total_bikes": 1,
+        "required": 1,
+        "speed": 0,
         "lanes": [
             "......0...........................",
             "..................................",
@@ -113,7 +113,7 @@ def simulation5():
             "..................................",
         ],
         "bikes": [
-            "0 0 1",
+            [0, 0, 1],
         ],
         "commands": [
             "SPEED",

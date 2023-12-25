@@ -8,12 +8,10 @@ class SimulatorState:
     def __init__(self, simulation_data):
         """constructor"""
         if simulation_data != None:
-            self.remaining_bikes = int(simulation_data["total_bikes"])
+            self.remaining_bikes = simulation_data["total_bikes"]
             self.success_bikes = 0
-            self.speed = int(simulation_data["speed"])
-            bikes = []
-            for bike in simulation_data["bikes"]:
-                bikes.append([int(j) for j in bike.split()])
+            self.speed = simulation_data["speed"]
+            bikes = simulation_data["bikes"]
             self.bikes = bikes.copy()
             self.command = ""
             self.last_command = ""
@@ -41,8 +39,8 @@ class Simulator:
     def __init__(self, simulation_data):
         """constructor"""
         self.name = simulation_data["name"]
-        self.total_bikes = int(simulation_data["total_bikes"])
-        self.required = int(simulation_data["required"])
+        self.total_bikes = simulation_data["total_bikes"]
+        self.required = simulation_data["required"]
         self.lanes = [
             list(simulation_data["lanes"][0]),
             list(simulation_data["lanes"][1]),
