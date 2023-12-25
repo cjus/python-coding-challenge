@@ -11,11 +11,10 @@ class SimulatorState:
             self.remaining_bikes = simulation_data["total_bikes"]
             self.success_bikes = 0
             self.speed = simulation_data["speed"]
-            bikes = simulation_data["bikes"]
-            self.bikes = bikes.copy()
+            self.bikes = simulation_data["bikes"]
             self.command = ""
             self.last_command = ""
-            self.iteration = -1
+            self.iteration = 0
             self.game_over = False
 
     def clone(self):
@@ -23,12 +22,32 @@ class SimulatorState:
         new_state.remaining_bikes = self.remaining_bikes
         new_state.success_bikes = self.success_bikes
         new_state.speed = self.speed
-        new_state.bikes = self.bikes.copy()
+        new_state.bikes = []
+        for bike in self.bikes:
+            new_state.bikes.append(bike.copy())
+
         new_state.command = self.command
         new_state.last_command = self.last_command
         new_state.iteration = self.iteration
-        new_state.game_over = self.game_over 
+        new_state.game_over = self.game_over
         return new_state
+
+    def __str__(self):
+        bike_data = []
+        for bike in self.bikes:
+            bike_data.append(f"{bike}")
+        output = [
+            "<SimulatorState\n",
+            f"  iteration: {self.iteration}\n",
+            f"  command: {self.command}\n",
+            f"  last_command :{self.last_command}\n",
+            f"  speed: {self.speed}\n",
+            f"  bikes:\n",
+            f"    {''.join(bike_data)}\n"
+            f"  remaining_bikes: {self.remaining_bikes}\n",
+            f"  success_bikes: {self.success_bikes}\n" ">\n",
+        ]
+        return "".join(output)
 
 
 class Simulator:
@@ -51,7 +70,7 @@ class Simulator:
 
     def render(self, state):
         """Render function to output the current state of the simulation"""
-        if state.iteration == -1:
+        if state.iteration == 0:
             print(f"Initial State")
         else:
             print(f"Iteration: {state.iteration} ({state.command})")
@@ -90,18 +109,17 @@ class Simulator:
             print()
         print("\n")
 
-    def process(self, state):
+    def process(self, state, command, iteration):
         """Process a single command or iteration of the simulation"""
         cloned_state = state.clone()
+        cloned_state.command = command
+        cloned_state.iteration = iteration
 
-        bike_data = []
-        for bike in cloned_state.bikes:
-            bike_data.append(bike)
-        len_bike_data = len(bike_data)
+        len_bike_data = len(cloned_state.bikes)
 
         if cloned_state.remaining_bikes == 0:
             cloned_state.game_over = True
-            return state
+            return cloned_state
 
         if cloned_state.command == "SPEED":
             cloned_state.speed = state.speed + 1
@@ -116,28 +134,28 @@ class Simulator:
         elif cloned_state.command == "UP":
             first_active_bike = -1
             for b in range(len_bike_data):
-                if bike_data[b][2]:
+                if cloned_state.bikes[b][2]:
                     first_active_bike = b
                     break
             if first_active_bike > -1:
-                if bike_data[first_active_bike][1] > 0:
+                if cloned_state.bikes[first_active_bike][1] > 0:
                     for b in range(len_bike_data):
-                        if bike_data[b][2]:
-                            bike_data[b][1] = bike_data[b][1] - 1
+                        if cloned_state.bikes[b][2]:
+                            cloned_state.bikes[b][1] = cloned_state.bikes[b][1] - 1
         elif cloned_state.command == "DOWN":
             last_active_bike = -1
             for b in reversed(range(len_bike_data)):
-                if bike_data[b][2]:
+                if cloned_state.bikes[b][2]:
                     last_active_bike = b
                     break
             if last_active_bike > -1:
-                if bike_data[last_active_bike][1] < len(self.lanes) - 1:
+                if cloned_state.bikes[last_active_bike][1] < len(self.lanes) - 1:
                     for b in range(len_bike_data):
-                        if bike_data[b][2]:
-                            bike_data[b][1] = bike_data[b][1] + 1
+                        if cloned_state.bikes[b][2]:
+                            cloned_state.bikes[b][1] = cloned_state.bikes[b][1] + 1
 
         for b in range(len_bike_data):
-            x, y, a = bike_data[b]
+            x, y, a = cloned_state.bikes[b]
             if a == 0:
                 continue
 
@@ -157,10 +175,9 @@ class Simulator:
                     cloned_state.success_bikes = cloned_state.success_bikes + 1
                     cloned_state.remaining_bikes = cloned_state.remaining_bikes - 1
             else:
-                bike_data[b][2] = 0
+                cloned_state.bikes[b][2] = 0
 
-            bike_data[b][0] = x
-            cloned_state.bikes[b] = [x, y, a].copy()
+            cloned_state.bikes[b][0] = x
 
         cloned_state.last_command = cloned_state.command
         cloned_state.game_over = False

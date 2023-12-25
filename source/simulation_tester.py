@@ -66,11 +66,15 @@ def main():
     data = simulation1()
     sim = Simulator(data)
     state = SimulatorState(data)
+
+    simulation_states = []
+    simulation_states.append(state)
+
     sim.render(state)
 
     send_simulation_initial_data(process, data)
 
-    i = 0
+    i = 1
     while True:
         send_simulation_data(process, state)
 
@@ -78,10 +82,10 @@ def main():
         if command != "":
             print(f"Command recieved: {command}")
 
-        state.command = command
-        state = sim.process(state)
-        state.iteration = state.iteration + 1
+        state = sim.process(state, command, i)
+
         sim.render(state)
+        simulation_states.append(state)
 
         if state.game_over or state.command == "":
             print("\nGAME OVER")
@@ -106,6 +110,14 @@ def main():
             pipe.close()
         except:
             pass
+
+    # print("\nState Stack Output:\n")
+    # for state in simulation_states:
+    #     print(state)
+    #     sim.render(state)
+    #     print("==================================================\n")
+
+    sim.render(simulation_states[8])
     print("\n")
 
 
