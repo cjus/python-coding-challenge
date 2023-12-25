@@ -11,6 +11,7 @@ Humankind is relying on you to see as many motorbikes safely across the bridge a
 """
 import sys
 import math
+from bike_ai import Bike_AI
 
 
 def output(statement):
@@ -19,40 +20,6 @@ def output(statement):
 
 def debug(statement):
     print(statement, file=sys.stderr, flush=True)
-
-
-class BikeAI:
-    commands = [
-        "SPEED",
-        "SPEED",
-        "SPEED",
-        "SLOW",
-        "JUMP",
-        "WAIT",
-        "WAIT",
-        "SPEED",
-        "SPEED",
-        "SPEED",
-        "SPEED",
-    ]
-    command_index = 0
-
-    def __init__(self, data):
-        self.total_bikes = data["total_bikes"]
-        self.required_bikes = data["required_bikes"]
-        self.lanes = data["lanes"]
-        self.speed = 0
-
-    def process(self, data):
-        self.speed = data["speed"]
-        self.bikes = data["bikes"]
-
-        command = ""
-        if self.command_index < len(self.commands):
-            command = self.commands[self.command_index]
-            self.command_index = self.command_index + 1
-
-        return command
 
 
 def main():
@@ -82,7 +49,7 @@ def main():
         ],
     }
 
-    bike_ai = BikeAI(sim_data)
+    bike_ai = Bike_AI(sim_data)
 
     # game loop
     while True:

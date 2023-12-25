@@ -7,7 +7,7 @@ This module invokes the main.py module and runs one or more simulations.
 import os
 import fcntl
 import subprocess
-from simulator import Simulator
+from simulator import Simulator, SimulatorState
 from simulations import simulation1, simulation2, simulation3, simulation4, simulation5
 
 
@@ -19,9 +19,9 @@ def send_simulation_initial_data(process, data):
     process.stdin.flush()
 
 
-def send_simulation_data(process, simulation):
-    process.stdin.write(f"{simulation.speed}\n")
-    for bike in simulation.bikes:
+def send_simulation_data(process, state):
+    process.stdin.write(f"{state.speed}\n")
+    for bike in state.bikes:
         x, y, a = bike
         process.stdin.write(f"{x} {y} {a}\n")
     process.stdin.flush()
@@ -63,36 +63,30 @@ def main():
     fl = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-    # simulation_data = simulation1()
-    # simulation_commands = simulation_data["commands"]
-    # for i in range(50 - len(simulation_commands)):
-    #     simulation_commands.append("WAIT")
-    # run_simulation(simulation_commands, simulation_data)
-
     data = simulation1()
     sim = Simulator(data)
-    sim.render(-1, "")
+    state = SimulatorState(data)
+    sim.render(state)
 
     send_simulation_initial_data(process, data)
 
     i = 0
     while True:
-        send_simulation_data(process, sim)
-        # try:
-        #     send_simulation_data(process, sim)
-        # except:
-        #     break
+        send_simulation_data(process, state)
 
         command = process.stdout.readline().strip()
         if command != "":
             print(f"Command recieved: {command}")
 
-        game_over, success_bikes = sim.process(command)
-        sim.render(i + 1, command)
-        if game_over or command == "":
+        state.command = command
+        state = sim.process(state)
+        state.iteration = state.iteration + 1
+        sim.render(state)
+
+        if state.game_over or state.command == "":
             print("\nGAME OVER")
-            print(f"Bikes accross bridge: {success_bikes}")
-            if success_bikes < int(data["required"]):
+            print(f"Bikes accross bridge: {state.success_bikes}")
+            if state.success_bikes < int(data["required"]):
                 print(f"Your mission was not successful.\n")
             else:
                 print(f"Congratuations, your mission was successful!\n")
