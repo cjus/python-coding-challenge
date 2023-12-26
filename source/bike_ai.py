@@ -1,25 +1,17 @@
 """Bike AI module"""
 from state_space_search_tree import S3T
-
+from simulator import SimulatorState, SimulatorCommand
 
 class Bike_AI:
-    COMMAND_NONE = 0
-    COMMAND_SPEED = 1
-    COMANND_SLOW = 2
-    COMMAND_JUMP = 3
-    COMMAND_WAIT = 4
-    COMMAND_UP = 5
-    COMMAND_DOWN = 6
     COMMANDS = [
-        COMMAND_NONE,
-        COMMAND_SPEED,
-        COMANND_SLOW,
-        COMMAND_JUMP,
-        COMMAND_WAIT,
-        COMMAND_UP,
-        COMMAND_DOWN,
+        SimulatorCommand.COMMAND_NONE,
+        SimulatorCommand.COMMAND_SPEED,
+        SimulatorCommand.COMANND_SLOW,
+        SimulatorCommand.COMMAND_JUMP,
+        SimulatorCommand.COMMAND_WAIT,
+        SimulatorCommand.COMMAND_UP,
+        SimulatorCommand.COMMAND_DOWN,
     ]
-    COMMANDS_STRS = ["SPEED", "SLOW", "JUMP", "WAIT", "UP", "DOWN"]
 
     commands = [
         "SPEED",
@@ -36,20 +28,25 @@ class Bike_AI:
     ]
     command_index = 0
 
-    def __init__(self, data):
-        self.total_bikes = data["total_bikes"]
-        self.required_bikes = data["required_bikes"]
-        self.lanes = data["lanes"]
-        self.__s3t__ = S3T({"parent": None, "score": 0, "command": self.COMMAND_NONE})
-        self.__build_S3T__()
-        self.speed = 0
+    def __init__(self, simulator, data):
+        self.simulator = simulator        
+        self.total_bikes = simulator.total_bikes
+        self.required_bikes = simulator.required
+        self.lanes = simulator.lanes
+        self.speed = data["speed"]
+        root_state = SimulatorState(None)
+        root_state.remaining_bikes = self.total_bikes
+        for bike in data["bikes"]:
+            root_state.bikes.append(bike.copy())
 
-    def __build_S3T__(self):
+        self.__s3t__ = S3T(root_state)
         for command in self.COMMANDS:
             if command != 0:
-                self.__s3t__.children.append(
-                    {"parent": self.__s3t__, "score": 0, "command": command}
-                )
+                state = root_state.clone()
+                state.command = command
+                new_state = self.simulator.process(state)
+                child_node = S3T(new_state, self.__s3t__)
+                self.__s3t__.children.append(child_node)
 
     def process(self, data):
         self.speed = data["speed"]

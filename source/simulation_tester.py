@@ -7,8 +7,9 @@ This module invokes the main.py module and runs one or more simulations.
 import os
 import fcntl
 import subprocess
-from simulator import Simulator, SimulatorState
+from simulator import Simulator
 from simulations import simulation1, simulation2, simulation3, simulation4, simulation5
+from bike_ai import Bike_AI
 
 
 def send_simulation_initial_data(process, data):
@@ -65,7 +66,8 @@ def main():
 
     data = simulation1()
     sim = Simulator(data)
-    state = SimulatorState(data)
+
+    bike_ai = Bike_AI(sim, data)
 
     simulation_states = []
     simulation_states.append(state)
@@ -82,7 +84,8 @@ def main():
         if command != "":
             print(f"Command recieved: {command}")
 
-        state = sim.process(state, command, i)
+        state.command = command
+        state = sim.process(state)
 
         sim.render(state)
         simulation_states.append(state)

@@ -1,34 +1,54 @@
 """
 Simulator
 This module invokes the main.py module and runs the meta simulation.
+Notes:
+  - in a larger program simulator state could be encoded using Bit fields
 """
 
 
+class SimulatorCommand:
+    COMMAND_NONE = 0
+    COMMAND_SPEED = 1
+    COMANND_SLOW = 2
+    COMMAND_JUMP = 3
+    COMMAND_WAIT = 4
+    COMMAND_UP = 5
+    COMMAND_DOWN = 6
+
+
 class SimulatorState:
-    def __init__(self, simulation_data):
+    def __init__(self, state):
         """constructor"""
-        if simulation_data != None:
-            self.remaining_bikes = simulation_data["total_bikes"]
+        if state == None:
+            self.score = 0
+            self.remaining_bikes = 0
             self.success_bikes = 0
-            self.speed = simulation_data["speed"]
-            self.bikes = simulation_data["bikes"]
-            self.command = ""
-            self.last_command = ""
-            self.iteration = 0
+            self.speed = 0
+            self.bikes = []
+            self.command = SimulatorCommand.COMMAND_NONE
+            self.game_over = False
+        else:
+            self.score = 0
+            self.remaining_bikes = state.total_bikes
+            self.success_bikes = state.success_bikes
+            self.speed = state.speed
+            self.bikes = []
+            for bike in state.bikes:
+                self.bikes.append(bike.copy())
+            self.command = self.command
             self.game_over = False
 
     def clone(self):
         new_state = SimulatorState(None)
+        new_state.score = self.score = 0
         new_state.remaining_bikes = self.remaining_bikes
         new_state.success_bikes = self.success_bikes
         new_state.speed = self.speed
         new_state.bikes = []
         for bike in self.bikes:
             new_state.bikes.append(bike.copy())
-
         new_state.command = self.command
-        new_state.last_command = self.last_command
-        new_state.iteration = self.iteration
+        # new_state.last_command = self.last_command
         new_state.game_over = self.game_over
         return new_state
 
@@ -38,9 +58,7 @@ class SimulatorState:
             bike_data.append(f"{bike}")
         output = [
             "<SimulatorState\n",
-            f"  iteration: {self.iteration}\n",
             f"  command: {self.command}\n",
-            f"  last_command :{self.last_command}\n",
             f"  speed: {self.speed}\n",
             f"  bikes:\n",
             f"    {''.join(bike_data)}\n"
@@ -53,7 +71,7 @@ class SimulatorState:
 class Simulator:
     """Simulator class. Encapsulates a running instance of a simulation"""
 
-    """Possible commands ["SPEED", "SLOW", "JUMP", "WAIT", "UP", "DOWN"]"""
+    COMMANDS_STRS = ["", "SPEED", "SLOW", "JUMP", "WAIT", "UP", "DOWN"]
 
     def __init__(self, simulation_data):
         """constructor"""
@@ -73,7 +91,7 @@ class Simulator:
         if state.iteration == 0:
             print(f"Initial State")
         else:
-            print(f"Iteration: {state.iteration} ({state.command})")
+            print(f"Command: {self.COMMANDS_STRS[state.command]})")
 
         print(f"Speed: {state.speed}")
 
@@ -109,76 +127,75 @@ class Simulator:
             print()
         print("\n")
 
-    def process(self, state, command, iteration):
+    def process(self, state):
         """Process a single command or iteration of the simulation"""
-        cloned_state = state.clone()
-        cloned_state.command = command
-        cloned_state.iteration = iteration
+        state = state.clone()
+        len_bike_data = len(state.bikes)
 
-        len_bike_data = len(cloned_state.bikes)
+        if state.remaining_bikes == 0:
+            state.game_over = True
+            return state
 
-        if cloned_state.remaining_bikes == 0:
-            cloned_state.game_over = True
-            return cloned_state
-
-        if cloned_state.command == "SPEED":
-            cloned_state.speed = state.speed + 1
-        elif cloned_state.command == "SLOW":
-            cloned_state.speed = state.speed - 1
-            if cloned_state.speed < 0:
-                cloned_state.speed = 0
-        elif cloned_state.command == "JUMP":
+        if state.command == SimulatorCommand.COMMAND_SPEED:  # handle SPEED
+            state.speed = state.speed + 1
+        elif state.command == "SLOW":  # handle SLOW
+            state.speed = state.speed - 1
+            if state.speed < 0:
+                state.speed = 0
+        elif state.command == SimulatorCommand.COMMAND_JUMP:  # handle JUMP
             pass
-        elif cloned_state.command == "WAIT":
+        elif state.command == SimulatorCommand.COMMAND_WAIT:  # handle WAIT
             pass
-        elif cloned_state.command == "UP":
+        elif state.command == SimulatorCommand.COMMAND_UP:  # handle UP
             first_active_bike = -1
             for b in range(len_bike_data):
-                if cloned_state.bikes[b][2]:
+                if state.bikes[b][2]:
                     first_active_bike = b
                     break
             if first_active_bike > -1:
-                if cloned_state.bikes[first_active_bike][1] > 0:
+                if state.bikes[first_active_bike][1] > 0:
                     for b in range(len_bike_data):
-                        if cloned_state.bikes[b][2]:
-                            cloned_state.bikes[b][1] = cloned_state.bikes[b][1] - 1
-        elif cloned_state.command == "DOWN":
+                        if state.bikes[b][2]:
+                            state.bikes[b][1] = state.bikes[b][1] - 1
+        elif state.command == SimulatorCommand.COMMAND_DOWN:  # handle DOWN
             last_active_bike = -1
             for b in reversed(range(len_bike_data)):
-                if cloned_state.bikes[b][2]:
+                if state.bikes[b][2]:
                     last_active_bike = b
                     break
             if last_active_bike > -1:
-                if cloned_state.bikes[last_active_bike][1] < len(self.lanes) - 1:
+                if state.bikes[last_active_bike][1] < len(self.lanes) - 1:
                     for b in range(len_bike_data):
-                        if cloned_state.bikes[b][2]:
-                            cloned_state.bikes[b][1] = cloned_state.bikes[b][1] + 1
+                        if state.bikes[b][2]:
+                            state.bikes[b][1] = state.bikes[b][1] + 1
 
         for b in range(len_bike_data):
-            x, y, a = cloned_state.bikes[b]
+            x, y, a = state.bikes[b]
             if a == 0:
                 continue
 
-            for j in range(x, x + cloned_state.speed + 1):
+            for j in range(x, x + state.speed + 1):
                 if j >= self.max_iterations:
                     break
-                if self.lanes[y][j] == "0" and cloned_state.last_command != "JUMP":
-                    cloned_state.remaining_bikes = cloned_state.remaining_bikes - 1
+                if (
+                    self.lanes[y][j] == "0"
+                    and state.last_command != SimulatorCommand.COMMAND_JUMP
+                ):
+                    state.remaining_bikes = state.remaining_bikes - 1
                     a = 0
                     x = j
                     break
 
             if a != 0:
-                x = x + cloned_state.speed
+                x = x + state.speed
                 if x >= self.max_iterations:
                     x = self.max_iterations - 1
-                    cloned_state.success_bikes = cloned_state.success_bikes + 1
-                    cloned_state.remaining_bikes = cloned_state.remaining_bikes - 1
+                    state.success_bikes = state.success_bikes + 1
+                    state.remaining_bikes = state.remaining_bikes - 1
             else:
-                cloned_state.bikes[b][2] = 0
+                state.bikes[b][2] = 0
 
-            cloned_state.bikes[b][0] = x
+            state.bikes[b][0] = x
 
-        cloned_state.last_command = cloned_state.command
-        cloned_state.game_over = False
-        return cloned_state
+        state.game_over = False
+        return state
