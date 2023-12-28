@@ -9,46 +9,42 @@ Notes:
 class SimulatorCommand:
     COMMAND_NONE = 0
     COMMAND_SPEED = 1
-    COMANND_SLOW = 2
+    COMMAND_WAIT = 2
     COMMAND_JUMP = 3
-    COMMAND_WAIT = 4
-    COMMAND_UP = 5
-    COMMAND_DOWN = 6
+    COMMAND_UP = 4
+    COMMAND_DOWN = 5
+    COMANND_SLOW = 6
 
 
 class SimulatorState:
     def __init__(self, state):
         """constructor"""
         if state == None:
-            self.score = 0
             self.remaining_bikes = 0
-            self.success_bikes = 0
             self.speed = 0
             self.bikes = []
             self.command = SimulatorCommand.COMMAND_NONE
             self.game_over = False
+            self.last_command = SimulatorCommand.COMMAND_NONE
         else:
-            self.score = 0
             self.remaining_bikes = state.total_bikes
-            self.success_bikes = state.success_bikes
             self.speed = state.speed
             self.bikes = []
             for bike in state.bikes:
                 self.bikes.append(bike.copy())
             self.command = self.command
             self.game_over = False
+            self.last_command = state.command
 
     def clone(self):
         new_state = SimulatorState(None)
-        new_state.score = self.score = 0
         new_state.remaining_bikes = self.remaining_bikes
-        new_state.success_bikes = self.success_bikes
         new_state.speed = self.speed
         new_state.bikes = []
         for bike in self.bikes:
             new_state.bikes.append(bike.copy())
         new_state.command = self.command
-        # new_state.last_command = self.last_command
+        new_state.last_command = self.command
         new_state.game_over = self.game_over
         return new_state
 
@@ -62,8 +58,7 @@ class SimulatorState:
             f"  speed: {self.speed}\n",
             f"  bikes:\n",
             f"    {''.join(bike_data)}\n"
-            f"  remaining_bikes: {self.remaining_bikes}\n",
-            f"  success_bikes: {self.success_bikes}\n" ">\n",
+            f"  remaining_bikes: {self.remaining_bikes}>\n",
         ]
         return "".join(output)
 
@@ -88,10 +83,11 @@ class Simulator:
 
     def render(self, state):
         """Render function to output the current state of the simulation"""
-        if state.iteration == 0:
-            print(f"Initial State")
-        else:
-            print(f"Command: {self.COMMANDS_STRS[state.command]})")
+        # if state.iteration == 0:
+        #     print(f"Initial State")
+        # else:
+
+        # print(f"Command: {self.COMMANDS_STRS[state.command]}")
 
         print(f"Speed: {state.speed}")
 
@@ -178,8 +174,7 @@ class Simulator:
                 if j >= self.max_iterations:
                     break
                 if (
-                    self.lanes[y][j] == "0"
-                    and state.last_command != SimulatorCommand.COMMAND_JUMP
+                    self.lanes[y][j] == "0" and state.last_command != SimulatorCommand.COMMAND_JUMP
                 ):
                     state.remaining_bikes = state.remaining_bikes - 1
                     a = 0
@@ -190,8 +185,11 @@ class Simulator:
                 x = x + state.speed
                 if x >= self.max_iterations:
                     x = self.max_iterations - 1
-                    state.success_bikes = state.success_bikes + 1
-                    state.remaining_bikes = state.remaining_bikes - 1
+                    # state.success_bikes = state.success_bikes + 1
+                    # state.remaining_bikes = state.remaining_bikes - 1
+                    state.game_over = True
+                    state.bikes[b][0] = x
+                    return state
             else:
                 state.bikes[b][2] = 0
 

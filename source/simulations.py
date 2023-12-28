@@ -1,5 +1,37 @@
 """Test cases for Simulator"""
 
+def simulation0():
+    return {
+        "name": "Sim 1: One lonley hole",
+        "total_bikes": 2,
+        "required": 1,
+        "speed": 0,
+        
+        # "lanes": [
+        #     "....",
+        #     "..0.",
+        #     "....",
+        #     "....",
+        # ],
+
+        "lanes": [
+            "..........",
+            "..........",
+            "......0...",
+            "..........",
+        ],
+
+        "bikes": [
+            [0, 2, 1],
+            [0, 3, 1]
+        ],
+        "commands": [
+            "SPEED",
+            "UP",
+            "SPEED",
+            "SPEED",
+        ],
+    }
 
 def simulation1():
     return {

@@ -7,8 +7,8 @@ This module invokes the main.py module and runs one or more simulations.
 import os
 import fcntl
 import subprocess
-from simulator import Simulator
-from simulations import simulation1, simulation2, simulation3, simulation4, simulation5
+from simulator import Simulator, SimulatorState
+from simulations import simulation0, simulation1, simulation2, simulation3, simulation4, simulation5
 from bike_ai import Bike_AI
 
 
@@ -49,6 +49,15 @@ def run_simulation(commands, data):
             break
     sim.reset()
 
+COMMAND_TO_INT = {
+    "": 0,
+    "SPEED": 1,
+    "WAIT": 2,
+    "JUMP": 3,
+    "UP": 4,
+    "DOWN": 5,
+    "SLOW": 6,
+}
 
 def main():
     process = subprocess.Popen(
@@ -64,10 +73,15 @@ def main():
     fl = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-    data = simulation1()
+    data = simulation0()
     sim = Simulator(data)
 
     bike_ai = Bike_AI(sim, data)
+
+    state = SimulatorState(None)
+    state.remaining_bikes = sim.total_bikes
+    for bike in data["bikes"]:
+        state.bikes.append(bike.copy())
 
     simulation_states = []
     simulation_states.append(state)
@@ -84,7 +98,7 @@ def main():
         if command != "":
             print(f"Command recieved: {command}")
 
-        state.command = command
+        state.command = COMMAND_TO_INT[command]
         state = sim.process(state)
 
         sim.render(state)
@@ -92,8 +106,8 @@ def main():
 
         if state.game_over or state.command == "":
             print("\nGAME OVER")
-            print(f"Bikes accross bridge: {state.success_bikes}")
-            if state.success_bikes < int(data["required"]):
+            print(f"Bikes accross bridge: {state.remaining_bikes}")
+            if state.remaining_bikes < int(data["required"]):
                 print(f"Your mission was not successful.\n")
             else:
                 print(f"Congratuations, your mission was successful!\n")
@@ -120,7 +134,7 @@ def main():
     #     sim.render(state)
     #     print("==================================================\n")
 
-    sim.render(simulation_states[8])
+    # sim.render(simulation_states[8])
     print("\n")
 
 

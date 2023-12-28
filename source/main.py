@@ -12,6 +12,7 @@ Humankind is relying on you to see as many motorbikes safely across the bridge a
 import sys
 import math
 from bike_ai import Bike_AI
+from simulator import Simulator, SimulatorState
 
 
 def output(statement):
@@ -39,17 +40,24 @@ def main():
     l3 = input()
 
     sim_data = {
+        "name": "test",
         "total_bikes": m,
-        "required_bikes": v,
+        "required": v,
+        "speed": 0,
         "lanes": [
             list(l0),
             list(l1),
             list(l2),
             list(l3),
         ],
+        "bikes": [
+            [0, 1, 1]
+        ],
     }
 
-    bike_ai = Bike_AI(sim_data)
+    sim = Simulator(sim_data)
+
+    bike_ai = Bike_AI(sim, sim_data)
 
     # game loop
     while True:
