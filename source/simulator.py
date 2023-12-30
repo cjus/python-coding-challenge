@@ -9,11 +9,11 @@ Notes:
 class SimulatorCommand:
     COMMAND_NONE = 0
     COMMAND_SPEED = 1
-    COMMAND_WAIT = 2
-    COMMAND_JUMP = 3
-    COMMAND_UP = 4
-    COMMAND_DOWN = 5
-    COMANND_SLOW = 6
+    COMMAND_JUMP = 2
+    COMMAND_UP = 3
+    COMMAND_DOWN = 4
+    COMMAND_SLOW = 5
+    COMMAND_WAIT = 6
 
 
 class SimulatorState:
@@ -80,15 +80,17 @@ class Simulator:
             list(simulation_data["lanes"][3]),
         ]
         self.max_iterations = len(self.lanes[0])
+        self.max_hole_location = -1
+        for lane in self.lanes:
+            location = 0
+            for slot in lane:
+                if slot == "0":
+                    if location > self.max_hole_location:
+                        self.max_hole_location = location
+                location += 1
 
     def render(self, state):
         """Render function to output the current state of the simulation"""
-        # if state.iteration == 0:
-        #     print(f"Initial State")
-        # else:
-
-        # print(f"Command: {self.COMMANDS_STRS[state.command]}")
-
         print(f"Speed: {state.speed}")
 
         for i in range(self.max_iterations):
@@ -134,7 +136,7 @@ class Simulator:
 
         if state.command == SimulatorCommand.COMMAND_SPEED:  # handle SPEED
             state.speed = state.speed + 1
-        elif state.command == "SLOW":  # handle SLOW
+        elif state.command == SimulatorCommand.COMMAND_SLOW:  # handle SLOW
             state.speed = state.speed - 1
             if state.speed < 0:
                 state.speed = 0
@@ -167,14 +169,24 @@ class Simulator:
 
         for b in range(len_bike_data):
             x, y, a = state.bikes[b]
-            if a == 0:
+            if a == 0:  # Bike is inactive, ignore
                 continue
 
-            for j in range(x, x + state.speed + 1):
+            # determine result of speed operation
+            landing_slot = x + state.speed
+            for j in range(x, landing_slot + 1):
                 if j >= self.max_iterations:
                     break
+
+                if j == landing_slot and self.lanes[y][j] == "0":
+                    state.remaining_bikes = state.remaining_bikes - 1
+                    a = 0
+                    x = j
+                    break
+
                 if (
-                    self.lanes[y][j] == "0" and state.last_command != SimulatorCommand.COMMAND_JUMP
+                    self.lanes[y][j] == "0"
+                    and state.last_command != SimulatorCommand.COMMAND_JUMP
                 ):
                     state.remaining_bikes = state.remaining_bikes - 1
                     a = 0
@@ -182,18 +194,24 @@ class Simulator:
                     break
 
             if a != 0:
-                x = x + state.speed
+                x = landing_slot
                 if x >= self.max_iterations:
-                    x = self.max_iterations - 1
-                    # state.success_bikes = state.success_bikes + 1
-                    # state.remaining_bikes = state.remaining_bikes - 1
+                    x = self.max_iterations
+                    state.bikes[b][0] = x - 1
                     state.game_over = True
+                else:
                     state.bikes[b][0] = x
-                    return state
+
             else:
+                state.bikes[b][0] = x
                 state.bikes[b][2] = 0
 
-            state.bikes[b][0] = x
+        if state.game_over == True:
+            return state
+
+        if state.remaining_bikes == 0:
+            state.game_over = True
+            return state
 
         state.game_over = False
         return state

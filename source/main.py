@@ -24,6 +24,14 @@ def debug(statement):
 
 
 def main():
+    DEBUG_COMMANDS = [
+        "SPEED",
+        "SPEED",
+        "SPEED",
+        "SPEED",
+    ]
+    debug_command_index = 0
+
     debug("Start of simulation")
 
     m = int(input())  # the amount of motorbikes to control
@@ -55,9 +63,9 @@ def main():
         ],
     }
 
-    sim = Simulator(sim_data)
+    # sim = Simulator(sim_data)
 
-    bike_ai = Bike_AI(sim, sim_data)
+    # bike_ai = Bike_AI(sim, sim_data)
 
     # game loop
     while True:
@@ -79,12 +87,14 @@ def main():
             debug("Exit: no more active_bikes")
             break
 
-        command = bike_ai.process(run_data)
+        # command = bike_ai.process(run_data)
+        command = DEBUG_COMMANDS[debug_command_index]
         if command == "":
             debug("Exit: end of commands")
             break
         else:
             output(command)
+        debug_command_index += 1
 
     debug("End of simulation")
 
