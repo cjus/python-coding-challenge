@@ -40,7 +40,6 @@ I also used [Apple's Freeform](https://apps.apple.com/us/app/freeform/id64437425
 
 ![Apple Freeform visualization of moves](./apple-freeform.png)
 
-
 ## Core AI files
 
 | File | Description |
@@ -48,4 +47,3 @@ I also used [Apple's Freeform](https://apps.apple.com/us/app/freeform/id64437425
 | [bike_ai.py](bike_ai.py) | The AI that computes the best next move for each turn. |
 | [simulator.py](simulator.py) | A module that manages the states of the simulator and also processes and scores potential moves.  Used by the `bike_ai.py` module and the `simulation_tester.py` module. |
 | [state_search_space_tree.py](state_search_space_tree.py) | A module that defines the state nodes and search space tree. |
-
