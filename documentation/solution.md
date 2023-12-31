@@ -31,7 +31,7 @@ The best score identified is then used to eliminate all other potential moves th
 ## Graphviz
 Early on I wanted to visualize the search tree to help me debug and understand the AI's behavior.  I used the [graphviz](https://graphviz.org/) library to generate a graph of the search tree. I build the `graphviz.py` wrapper module for this purpose.  The `Bike_AI` class has a `use_graphviz` flag that can be used to enable/disable the graphviz graph generation. Note that after about 5-10 turns the graph becomes too large to be useful.  This is where I generated custom test cases to help limit the size of the graph.
 
-![Graphviz graph of the search tree](./saerch-tree.png)
+![Graphviz graph of the search tree](./search-tree.png)
 
 > A PDF of a larger graph can be found [here](./search-tree.pdf). Note you'll need a PDF viewer that allows you to zoom in to see the details.
 
