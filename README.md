@@ -1,8 +1,8 @@
 # A Coding Challenge
 
-I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge was hosted on a a programming site with the following description (note I've changed the wording to protect the challenge for future developers):
+I recently applied for a job that asked whether I'd be willing to complete a coding challenge. åThe challenge was hosted on a a programming site with the following description (note I've changed the wording to protect the challenge for future developers):
 
-It's the sort of problem that reminds you of all those things you learned in school but never thought you'd use in the real world.  It's also the sort of problem that you can't brute force your way through.  You have to think about the problem and come up with a solution that is both efficient and effective.
+It's the sort of problem that reminds you of all those things you learned in school but never thought you'd use in the real world. It's also the sort of problem that you can't brute force your way through. You have to think about the problem and come up with a solution that is both efficient and effective.
 
 **Quick summary**
 - You have a four lane bridge with one to four bikes at the start of the bridge.

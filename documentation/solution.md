@@ -36,7 +36,7 @@ Early on I wanted to visualize the search tree to help me debug and understand t
 > A PDF of a larger graph can be found [here](./search-tree.pdf). Note you'll need a PDF viewer that allows you to zoom in to see the details.
 
 ## Apple Freeform
-I also used [Apple's Freeform](https://apps.apple.com/us/app/freeform/id6443742539) to visually think through challenges.
+I also used [Apple's Freeform](https://apps.apple.com/us/app/freeform/id6443742539) to visually think through challenges using a digital whiteboard.
 
 ![Apple Freeform visualization of moves](./apple-freeform.png)
 

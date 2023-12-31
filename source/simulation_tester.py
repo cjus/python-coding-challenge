@@ -75,7 +75,7 @@ def run_internal_sim(sim, data):
     bike_ai = Bike_AI(sim, use_graphviz=False, debug=True)
     step_data = {
         "speed": data["speed"],
-        "remaining_bikes": data["required"],
+        "remaining_bikes": data["total_bikes"],
         "bikes": data["bikes"],
     }
     step_data["speed"] = data["speed"]
@@ -165,11 +165,11 @@ def run_external_sim(sim, data):
 
 
 def main():
-    data = SIM_TESTS.simulation1()
+    data = SIM_TESTS.simulation12()
     sim = Simulator(data)
 
-    #run_internal_sim(sim, data)
-    run_external_sim(sim, data)
+    run_internal_sim(sim, data)
+    # run_external_sim(sim, data)
 
 
 if __name__ == "__main__":
