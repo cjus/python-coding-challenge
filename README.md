@@ -1,47 +1,38 @@
-# the-bridge-episode-2
-The Bridge Coding Challenge
+# A Coding Challenge
 
-## Prerequisites
-As a general rule I try to minimize the amount of environment setups I have on my machine.  Instead I prefer to build containerized environments. 
+I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge was hosted on a a programming site with the following description (note I've changed the wording to protect the challenge for future developers):
 
-As a one-time setup you'll need to build the docker image that will be used to run the project.  To do this, run the following command from the root of the project:
+- You have a four lane bridge with one to four bikes at the start of the bridge.
+- Your goal is to get a minimum number of bikes accross the bridge.
+- To complicate matters the bridge has pot holes that bikes have to navigate by moving left or right or jumping over them.
+- Your challenge is to write an AI that can get at least the minimum number of bikes accross the bridge.
+- The programming site provides you a turn-based simulation that will allow you to test your AI.
 
-```bash
-cd scripts
-./build.sh
-```
+## Core challenges
 
-## Launching the dev environment
-To launch the dev environment, simply run the following command from the root of the project:
+- During each turn (iteration on the game loop) you're given the updated position of your bikes and the speed they're traveling.
+- On each turn you must provide your next move.
+- You can't take moves back once you've made them and when you lose a bike it's gone for good.
+- With six possible moves per turn and a potential of 30-50 turns, computing and storing all 1.41e+38 possible moves required to find the best move is not feasible using brute force search on most single machines.
 
-```bash
-cd scripts
-./startup.sh
-```
+So the core challenge is that on each turn you have to compute the best next move given the information at hand while minimizing the size of the search tree.
 
-This will launch a docker stack with a single container, python-dev.  The container will have all the necessary dependencies installed to run the project.  It will also mount the project directory as a volume so that any changes made to the code will be reflected in the container.
+## My general approach
+I approached this problem by first ensuring I understood how the online simulator works, i.e., how it interpretes the use of the six possible moves per turn.
 
-### Running the project
-Once the dev environment is up and running, you can run the project by running the following command from the root of the project:
+To do this I built a `simulation_tester.py` module which is functionally similar to the online one - even in how it uses operating system pipes to communicate with the child process that hosts the client AI.
 
-```bash
-cd scripts
-./shell.sh
-```
+The online site provides a series of test cases that you can use to test your AI.  I encoded those test cases in my `simulations.py` module which is used by my `simulation_tester.py` module. This allowed me to iterate on my AI locally without having to use the online site.
 
-That will allow you to enter the docker container.  Once inside the container, you can run the project by running the following command:
+I considered that necessary in order to be able to debug my AI, but also to be able to test my AI with shorter and custom test cases.
 
-```bash
-python3 main.py
-```
 
-While that works just fine, I prefer to launch VSCode and connect to the running container.  To do this, you'll need to install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.  Once installed, you can launch VSCode and connect to the running container by clicking the green icon in the bottom left corner of the VSCode window.  This will open a menu with a list of options.  Select the "Remote-Containers: Attach to Running Container..." option.  This will open a new VSCode window that is connected to the running container.  
+## My solution
+- [My solution](documentation/solution.md)
 
-## Shutting down the dev environment
-To shut down the dev environment, simply run the following command from the root of the project:
 
-```bash
-cd scripts
-./shutdown.sh
-```
+
+
+## Docker Setup
+- [Docker instructions](documentation/docker.md)
 

@@ -1,8 +1,7 @@
 """
 Simulator
-This module invokes the main.py module and runs the meta simulation.
-Notes:
-  - in a larger program simulator state could be encoded using Bit fields
+A module that manages the states of the simulator.
+It also processes and scores potential moves.
 """
 
 
