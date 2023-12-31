@@ -14,11 +14,5 @@ Bike_AI(simulator, use_graphviz=False, debug=False, full_search=False)
 | --- | --- |
 | [bike_ai.py](bike_ai.py) | The AI that computes the best next move for each turn. |
 | [simulator.py](simulator.py) | A module that manages the states of the simulator and also processes and scores potential moves.  Used by the `bike_ai.py` module and the `simulation_tester.py` module. |
-| [simulation_tester.py](simulation_tester.py) | A simulation tester that can be used to test the AI locally |
-| [simulations.py](simulations.py) | A collection of test cases that can be used by the `simulation_tester.py` module.|
 | [state_search_space_tree.py](state_search_space_tree.py) | A modle that defines the state nodes and search space tree. |
-| [main.py](main.py) | A script that is used to host the AI within a simulation. |
-| [graphviz.py](graphviz.py) | A module that can be used to generate a graphviz graph of the search tree. |
 
-- Files in the `scripts` folder are used to manage a docker stack that hosts the AI and the simulation.  See the [Docker instructions](documentation/docker.md) for more information.
-- Files in the `python-dev` folder are used to build the docker image that is used by the docker stack.
