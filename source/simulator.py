@@ -129,6 +129,8 @@ class Simulator:
         """Process a single command or iteration of the simulation"""
         state = state.clone()
         len_bike_data = len(state.bikes)
+        is_moving_up = False
+        is_moving_down = False
 
         if state.remaining_bikes == 0:
             state.game_over = True
@@ -150,22 +152,19 @@ class Simulator:
                 if state.bikes[b][2]:
                     first_active_bike = b
                     break
-            if first_active_bike > -1:
-                if state.bikes[first_active_bike][1] > 0:
-                    for b in range(len_bike_data):
-                        if state.bikes[b][2]:
-                            state.bikes[b][1] = state.bikes[b][1] - 1
+            if first_active_bike > -1 and state.bikes[first_active_bike][1] > 0:
+                is_moving_up = True
         elif state.command == SimulatorCommand.COMMAND_DOWN:  # handle DOWN
             last_active_bike = -1
             for b in reversed(range(len_bike_data)):
                 if state.bikes[b][2]:
                     last_active_bike = b
                     break
-            if last_active_bike > -1:
-                if state.bikes[last_active_bike][1] < len(self.lanes) - 1:
-                    for b in range(len_bike_data):
-                        if state.bikes[b][2]:
-                            state.bikes[b][1] = state.bikes[b][1] + 1
+            if (
+                last_active_bike > -1
+                and state.bikes[last_active_bike][1] < len(self.lanes) - 1
+            ):
+                is_moving_down = True
 
         for b in range(len_bike_data):
             x, y, a = state.bikes[b]
@@ -174,16 +173,35 @@ class Simulator:
 
             # determine result of speed operation
             landing_slot = x + state.speed
-            for j in range(x, landing_slot + 1):
+            for j in range(x + 1, landing_slot):
                 if j >= self.max_iterations:
                     break
 
-                if j == landing_slot and self.lanes[y][j] == "0":
-                    state.remaining_bikes = state.remaining_bikes - 1
-                    a = 0
-                    x = j
-                    break
+                # if moving up check for holes on current path before moving up
+                if (
+                    is_moving_up
+                    and state.last_command != SimulatorCommand.COMMAND_JUMP
+                    and j != landing_slot
+                ):
+                    if self.lanes[y - 1][j] == "0":
+                        state.remaining_bikes = state.remaining_bikes - 1
+                        a = 0
+                        x = j
+                        break
 
+                # if moving down check for holes on current path before moving down
+                if (
+                    is_moving_down
+                    and state.last_command != SimulatorCommand.COMMAND_JUMP
+                    and j != landing_slot
+                ):
+                    if self.lanes[y + 1][j] == "0":
+                        state.remaining_bikes = state.remaining_bikes - 1
+                        a = 0
+                        x = j
+                        break
+
+                # if current square has a whole and the last operation was not a jump then lose bike
                 if (
                     self.lanes[y][j] == "0"
                     and state.last_command != SimulatorCommand.COMMAND_JUMP
@@ -193,6 +211,23 @@ class Simulator:
                     x = j
                     break
 
+            if is_moving_up:
+                y = y - 1
+                state.bikes[b][1] = y
+
+            if is_moving_down:
+                y = y + 1
+                state.bikes[b][1] = y
+
+            # if land on hole,lose bike
+            if (
+                landing_slot < self.max_iterations
+                and self.lanes[y][landing_slot] == "0"
+            ):
+                state.remaining_bikes = state.remaining_bikes - 1
+                a = 0
+                # x = j
+
             if a != 0:
                 x = landing_slot
                 if x >= self.max_iterations:
@@ -201,11 +236,12 @@ class Simulator:
                     state.game_over = True
                 else:
                     state.bikes[b][0] = x
-
             else:
                 state.bikes[b][0] = x
                 state.bikes[b][2] = 0
 
+        if state.remaining_bikes < self.required:
+            state.game_over = True
         if state.game_over == True:
             return state
 

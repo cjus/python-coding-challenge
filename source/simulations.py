@@ -81,7 +81,7 @@ def simulation3():
             [0, 2, 1],
             [0, 3, 1],
         ],
-        "commands": [],
+        "commands": ["SLOW", "SLOW", "JUMP", "SLOW", "JUMP", "SLOW", "JUMP", "SPEED"],
     }
 
 
@@ -135,7 +135,7 @@ def simulation5():
             [0, 2, 1],
             [0, 3, 1],
         ],
-        "commands": ["JUMP", "JUMP", "JUMP", "SPEED", "JUMP", "SPEED"],
+        "commands": ["SPEED", "SLOW", "JUMP", "SPEED", "JUMP", "SPEED"],
     }
 
 
@@ -186,16 +186,7 @@ def simulation7():
             [0, 1, 1],
             [0, 2, 1],
         ],
-        "commands": [
-            "SPEED",
-            "JUMP",
-            "JUMP",
-            "SPEED",
-            "SPEED",
-            "JUMP",
-            "JUMP",
-            "SPEED",
-        ],
+        "commands": ["SPEED", "JUMP", "SPEED", "SPEED", "JUMP", "JUMP", "JUMP"],
     }
 
 
@@ -217,7 +208,7 @@ def simulation8():
             [0, 2, 1],
             [0, 3, 1],
         ],
-        "commands": ["JUMP", "JUMP", "JUMP", "SPEED", "JUMP", "SPEED"],
+        "commands": ["SPEED", "SLOW", "JUMP", "SPEED", "JUMP", "SPEED"],
     }
 
 
@@ -236,7 +227,17 @@ def simulation9():
         "bikes": [
             [0, 2, 1],
         ],
-        "commands": [],
+        "commands": [
+            "DOWN",
+            "JUMP",
+            "UP",
+            "UP",
+            "UP",
+            "SPEED",
+            "JUMP",
+            "JUMP",
+            "SPEED",
+        ],
     }
 
 
@@ -278,16 +279,7 @@ def simulation11():
             [0, 2, 1],
             [0, 3, 1],
         ],
-        "commands": [
-            "SPEED",
-            "JUMP",
-            "SLOW",
-            "JUMP",
-            "JUMP",
-            "SPEED",
-            "SPEED",
-            "SPEED",
-        ],
+        "commands": ["SPEED", "SPEED", "JUMP", "JUMP", "SPEED", "SPEED"],
     }
 
 
@@ -307,5 +299,25 @@ def simulation12():
             [0, 1, 1],
             [0, 2, 1],
         ],
-        "commands": [],
+        "commands": [
+            "SPEED",
+            "DOWN",
+            "SPEED",
+            "UP",
+            "JUMP",
+            "UP",
+            "SLOW",
+            "DOWN",
+            "DOWN",
+            "SPEED",
+            "JUMP",
+            "UP",
+            "SPEED",
+            "SPEED",
+            "JUMP",
+            "UP",
+            "UP",
+            "SPEED",
+            "JUMP",
+        ],
     }

@@ -6,6 +6,7 @@ from graph_viz import GraphViz
 
 
 class Bike_AI:
+    MAX_DEPTH = 50
     COMMANDS = [
         SimulatorCommand.COMMAND_NONE,
         SimulatorCommand.COMMAND_SPEED,
@@ -34,24 +35,27 @@ class Bike_AI:
 
     command_index = 0
 
-    def __init__(self, simulator, data, use_graphviz=False, debug=False):
+    def __init__(self, simulator, use_graphviz=False, debug=False, full_search=False):
         self.start = time.time()
-
         self.simulator = simulator
         self.total_bikes = simulator.total_bikes
         self.required_bikes = simulator.required
         self.lanes = simulator.lanes
-        self.speed = data["speed"]
         self.highest_score = -9999
         self.max_depth_reached = 0
         self.use_graphviz = use_graphviz
         self.winning_node = None
         self.node_id = 0
         self.debug = debug
+        self.full_search = full_search
+        self.end_search = False
+        self.winning_line = {}
 
+    def process_move(self, data):
+        self.node_id = 0
         state = SimulatorState(None)
-        state.speed = self.speed
-        state.remaining_bikes = self.total_bikes
+        state.speed = data["speed"]
+        state.remaining_bikes = data["remaining_bikes"]
         for bike in data["bikes"]:
             state.bikes.append(bike.copy())
 
@@ -59,13 +63,18 @@ class Bike_AI:
             self.graph_viz = GraphViz("bikes")
 
         self.s3t_node = S3T_Node(state, f"root-{self.node_id}")
-        self.build_search_tree(self.s3t_node, 0, 50)
-
+        self.build_search_tree(self.s3t_node, 0, self.MAX_DEPTH)
         self.end = time.time()
+
         if self.use_graphviz:
             self.graph_viz.render()
 
-    def build_search_tree(self, node, depth, max_depth):       
+        return self.get_winning_line()
+
+    def build_search_tree(self, node, depth, max_depth):
+        if self.end_search:
+            return
+
         if depth == max_depth or node.get_data().game_over:
             return
 
@@ -75,12 +84,12 @@ class Bike_AI:
         for command in self.COMMANDS:
             if command != 0:
                 if node.data.speed == 0 and command != SimulatorCommand.COMMAND_SPEED:
-                    continue  # CJUS
+                    continue
 
                 new_state = node.data.clone()
                 new_state.command = command
 
-                child_state = self.simulator.process(new_state)                
+                child_state = self.simulator.process(new_state)
                 score = child_state.remaining_bikes - ((node.depth + 1) * 0.01)
                 if score < self.highest_score:
                     continue
@@ -102,6 +111,9 @@ class Bike_AI:
                 )
                 if has_win:
                     if score > self.highest_score:
+                        if not self.full_search:
+                            self.end_search = True
+
                         self.highest_score = score
                         self.winning_node = child_node
 
@@ -127,7 +139,9 @@ class Bike_AI:
                         child_node.label, round(score, 4), has_win, game_over
                     )
                     self.graph_viz.add_edge(
-                        node.label, child_node.label, f"{self.COMMANDS_STRS[command]}-{depth}"
+                        node.label,
+                        child_node.label,
+                        f"{self.COMMANDS_STRS[command]}-{depth}",
                     )
 
                 if not has_win:
@@ -160,7 +174,7 @@ class Bike_AI:
 
     def get_elapsed_time(self):
         return self.end - self.start
-    
+
     def process(self, data):
         self.speed = data["speed"]
         self.bikes = data["bikes"]

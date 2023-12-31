@@ -19,10 +19,10 @@ from simulations import (
     simulation6,
     simulation7,
     simulation8,
-    simulation9, # Failed 
+    simulation9,
     simulation10,
     simulation11,
-    simulation12, # Failed
+    simulation12,
 )
 from bike_ai import Bike_AI
 
@@ -35,6 +35,7 @@ COMMAND_TO_INT = {
     "DOWN": SimulatorCommand.COMMAND_DOWN,
     "SLOW": SimulatorCommand.COMMAND_SLOW,
 }
+
 
 def send_simulation_initial_data(process, data):
     process.stdin.write(f"{data['total_bikes']}\n")
@@ -81,8 +82,10 @@ def run_simulation(commands, data):
                     print(f"Congratuations, your mission was successful!\n")
                 break
 
+
 def num_with_commas(num):
-    return f'{num:,}'.replace('.',',')
+    return f"{num:,}".replace(".", ",")
+
 
 def main():
     process = subprocess.Popen(
@@ -98,34 +101,43 @@ def main():
     fl = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-    data = simulation9()
+    data = simulation2()
+    sim = Simulator(data)
 
-    # sim = Simulator(data)
-    run_simulation(["", 'DOWN', 'SPEED', 'UP', 'JUMP', 'DOWN', 'SPEED', 'SPEED'], data)
+    # run_simulation(["", 'DOWN', 'SPEED', 'UP', 'JUMP', 'DOWN', 'SPEED', 'SPEED'], data)
 
-    # print(f"\n\nStarting Bike_AI on {sim.name}\n")
-    # bike_ai = Bike_AI(sim, data, False, True)
-    # print(f"\n\nBike_AI elapsed time: {round(bike_ai.get_elapsed_time(),2)} seconds.")
-    # print(f"Examined a total of {num_with_commas(bike_ai.node_id)} nodes out of a maximum possible {num_with_commas(bike_ai.get_maximum_nodes())} nodes by depth: {bike_ai.max_depth_reached}")
-    # print(f"Winning line is: {bike_ai.get_winning_line()}\n")
+    print(f"\nStarting Bike_AI on {sim.name}\n")
+    bike_ai = Bike_AI(sim, False, True)
+    data = {
+        "speed": data["speed"],
+        "remaining_bikes": data["required"],
+        "bikes": data["bikes"],
+    }
+    data["speed"] = 2
+    data["bikes"] = [
+            [1, 0, 1],
+            [1, 1, 1],
+            [1, 2, 1],
+            [1, 3, 1],
+        ]
+    winning_line = bike_ai.process_move(data)
 
+    print(f"\nBike_AI elapsed time: {round(bike_ai.get_elapsed_time(),2)} seconds.")
+    print(
+        f"Examined a total of {num_with_commas(bike_ai.node_id)} nodes out of a maximum possible {num_with_commas(bike_ai.get_maximum_nodes())} nodes by depth: {bike_ai.max_depth_reached}"
+    )
+    print(f"Winning line is: {bike_ai.get_winning_line()}\n")
 
     state = SimulatorState(None)
     state.remaining_bikes = sim.total_bikes
-
     for bike in data["bikes"]:
         state.bikes.append(bike.copy())
-
-    simulation_states = []
-    simulation_states.append(state)
-
+    send_simulation_initial_data(process, data)
     sim.render(state)
 
-    send_simulation_initial_data(process, data)
-
-    i = 1
+    current_speed = data["speed"]
     while True:
-        send_simulation_data(process, state)
+        send_simulation_data(process, state, current_speed)
 
         command = process.stdout.readline().strip()
         if command != "":
@@ -133,9 +145,9 @@ def main():
 
         state.command = COMMAND_TO_INT[command]
         state = sim.process(state)
+        current_speed = state.speed
 
         sim.render(state)
-        simulation_states.append(state)
 
         if state.game_over or state.command == "":
             print("\nGAME OVER")
@@ -146,8 +158,6 @@ def main():
                 print(f"Congratuations, your mission was successful!\n")
             break
 
-        i = i + 1
-
     print("Process output: ")
     while True:
         line = process.stderr.readline()
@@ -155,19 +165,11 @@ def main():
             break
         print(f"   {line.rstrip()}")
 
-    for pipe in [process.stdin, process.stdout, process.stderr]:
-        try:
+    try:
+        for pipe in [process.stdin, process.stdout, process.stderr]:
             pipe.close()
-        except:
-            pass
-
-    # print("\nState Stack Output:\n")
-    # for state in simulation_states:
-    #     print(state)
-    #     sim.render(state)
-    #     print("==================================================\n")
-
-    # sim.render(simulation_states[8])
+    except:
+        pass
     print("\n")
 
 

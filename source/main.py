@@ -10,7 +10,6 @@ The motorbikes are perfectly capable of crossing the damaged bridge but, because
 Humankind is relying on you to see as many motorbikes safely across the bridge as possible!
 """
 import sys
-import math
 from bike_ai import Bike_AI
 from simulator import Simulator, SimulatorState
 
@@ -24,14 +23,6 @@ def debug(statement):
 
 
 def main():
-    DEBUG_COMMANDS = [
-        "SPEED",
-        "SPEED",
-        "SPEED",
-        "SPEED",
-    ]
-    debug_command_index = 0
-
     debug("Start of simulation")
 
     m = int(input())  # the amount of motorbikes to control
@@ -58,22 +49,14 @@ def main():
             list(l2),
             list(l3),
         ],
-        "bikes": [
-            [0, 1, 1]
-        ],
     }
-
-    # sim = Simulator(sim_data)
-
-    # bike_ai = Bike_AI(sim, sim_data)
 
     # game loop
     while True:
-        active_bikes = False
         s = int(input())  # the motorbikes' speed
+        run_data = {"speed": s, "remaining_bikes": 0, "bikes": []}
 
-        run_data = {"speed": s, "bikes": []}
-
+        remaining_bikes = 0
         for i in range(m):
             # x: x coordinate of the motorbike
             # y: y coordinate of the motorbike
@@ -82,19 +65,31 @@ def main():
             debug(f"x: {x}, y: {y}, a: {a}")
             run_data["bikes"].append([x, y, a])
             if a > 0:
-                active_bikes = True
-        if not active_bikes:
+                remaining_bikes += 1
+
+        run_data["remaining_bikes"] = remaining_bikes
+        if remaining_bikes == 0:
             debug("Exit: no more active_bikes")
             break
 
-        # command = bike_ai.process(run_data)
-        command = DEBUG_COMMANDS[debug_command_index]
-        if command == "":
+        # state = SimulatorState(None)
+        # state.remaining_bikes = remaining_bikes
+        # for bike in run_data["bikes"]:
+        #     state.bikes.append(bike.copy())
+
+        sim_data["total_bikes"] = remaining_bikes
+        sim = Simulator(sim_data)
+        bike_ai = Bike_AI(sim, False, False, False)
+        winning_moves = bike_ai.process_move(run_data)
+        winning_moves.pop()  # remove last move which is the branch score
+        debug(f"winning_moves: {winning_moves}")
+
+        try:
+            command = winning_moves.pop(0)
+            output(command)
+        except:
             debug("Exit: end of commands")
             break
-        else:
-            output(command)
-        debug_command_index += 1
 
     debug("End of simulation")
 
