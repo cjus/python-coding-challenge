@@ -132,7 +132,7 @@ def run_external_sim(sim, data):
 
         command = process.stdout.readline().strip()
         if command != "":
-            print(f"Command recieved: {command}")
+            print(f"Command received: {command}")
 
         state.command = COMMAND_TO_INT[command]
         state = sim.process(state)

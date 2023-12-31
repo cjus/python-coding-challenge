@@ -15,10 +15,10 @@ By building a local simulation tester I was able to capture the console output o
 
 In the above example we see that an earlier version of the AI found two winning moves but took 70 seconds to do so on a Mac M1 MAX Pro. Part of the problem was that it had to create and evaluate 2.9 millions nodes out of a possible 12 million nodes at the 9th ply.
 
-In this example, the AI found the winning move in 0.0108 seconds by only evaluating 208 nodes out of a possible 731,231,688,012,594 nodes at the 19th ply.
+In this next example, we see that an updated AI found the winning move in 0.0108 seconds by only evaluating 208 nodes out of a possible 731,231,688,012,594 nodes at the 19th ply.
 
 ```shell
-Starting Bike_AI on Sim 12: Well worn road
+Starting Bike_AI on Sim 12
 
 Found a winning line at node (161) with a score of 0.81 in 0.0108 seconds
         ['SPEED', 'DOWN', 'SPEED', 'UP', 'JUMP', 'UP', 'SLOW', 'DOWN', 'DOWN', 'SPEED', 'JUMP', 'UP', 'SPEED', 'SPEED', 'JUMP', 'UP', 'UP', 'SPEED', 'JUMP', 0.81]
@@ -46,7 +46,7 @@ Speed: 1
 The next iterations show the play by play of the game.
 
 ```shell
-Command recieved: SPEED
+Processing: SPEED
 Speed: 2
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -55,9 +55,12 @@ Speed: 2
 .1.x..................xxx....xxx......x.x..................xxxxx.
 ..2.xxx.........x.x...xxx................xxx............xxxxxx.x.
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
+```
 
+At this point we lose the first bike.
 
-Command recieved: DOWN
+```shell
+Processing: DOWN
 Speed: 2
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -66,9 +69,13 @@ Speed: 2
 .1.x..................xxx....xxx......x.x..................xxxxx.
 ....xxx.........x.x...xxx................xxx............xxxxxx.x.
 ....2.......x.xxxxxx...........xxxx...............x.x.....xxxxxx.
+```
+
+Bike #2 continues on to position 7. In the next outputs we see bike #2 continue its progression accross the bridge.
 
 
-Command recieved: SPEED
+```shell
+Processing: SPEED
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -79,7 +86,7 @@ Speed: 3
 .......2....x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: UP
+Processing: UP
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -90,7 +97,7 @@ Speed: 3
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: JUMP
+Processing: JUMP
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -101,7 +108,7 @@ Speed: 3
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: UP
+Processing: UP
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -112,7 +119,7 @@ Speed: 3
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: SLOW
+Processing: SLOW
 Speed: 2
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -123,7 +130,7 @@ Speed: 2
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: DOWN
+Processing: DOWN
 Speed: 2
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -134,7 +141,7 @@ Speed: 2
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: DOWN
+Processing: DOWN
 Speed: 2
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -145,7 +152,7 @@ Speed: 2
 ............x.xxxxxx..2........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: SPEED
+Processing: SPEED
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -156,7 +163,7 @@ Speed: 3
 ............x.xxxxxx.....2.....xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: JUMP
+Processing: JUMP
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -167,7 +174,7 @@ Speed: 3
 ............x.xxxxxx........2..xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: UP
+Processing: UP
 Speed: 3
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -178,7 +185,7 @@ Speed: 3
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: SPEED
+Processing: SPEED
 Speed: 4
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -189,7 +196,7 @@ Speed: 4
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: SPEED
+Processing: SPEED
 Speed: 5
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -200,7 +207,7 @@ Speed: 5
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: JUMP
+Processing: JUMP
 Speed: 5
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -211,7 +218,7 @@ Speed: 5
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: UP
+Processing: UP
 Speed: 5
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -222,7 +229,7 @@ Speed: 5
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: UP
+Processing: UP
 Speed: 5
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -233,7 +240,7 @@ Speed: 5
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: SPEED
+Processing: SPEED
 Speed: 6
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -244,7 +251,7 @@ Speed: 6
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 
-Command recieved: JUMP
+Processing: JUMP
 Speed: 6
 00000000001111111111222222222233333333334444444444555555555566666
 01234567890123456789012345678901234567890123456789012345678901234
@@ -254,6 +261,10 @@ Speed: 6
 ....xxx.........x.x...xxx................xxx............xxxxxx.x.
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
+
+GAME OVER
+Bikes accross bridge: 1
+Congratuations, your mission was successful!
 ```
 
 - [Docker instructions](documentation/docker.md)
