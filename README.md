@@ -2,6 +2,9 @@
 
 I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge was hosted on a a programming site with the following description (note I've changed the wording to protect the challenge for future developers):
 
+It's the sort of problem that reminds you of all those things you learned in school but never thought you'd use in the real world.  It's also the sort of problem that you can't brute force your way through.  You have to think about the problem and come up with a solution that is both efficient and effective.
+
+**Quick summary**
 - You have a four lane bridge with one to four bikes at the start of the bridge.
 - Your goal is to get a minimum number of bikes accross the bridge.
 - To complicate matters the bridge has pot holes that bikes have to navigate by moving left or right or jumping over them.
@@ -13,24 +16,17 @@ I recently applied for a job that asked whether I'd be willing to complete a cod
 - During each turn (iteration on the game loop) you're given the updated position of your bikes and the speed they're traveling.
 - On each turn you must provide your next move.
 - You can't take moves back once you've made them and when you lose a bike it's gone for good.
-- With six possible moves per turn and a potential of 30-50 turns, computing and storing all 1.41e+38 possible moves required to find the best move is not feasible using brute force search on most single machines.
+- With six possible moves per turn and a potential of 30-50 turns, computing and storing all 1.41e+38 possible moves required to find the best move is not feasible using a [brute force search](https://en.wikipedia.org/wiki/Brute-force_search).
+  - According to ChatGPT: 
+    - That's one quintillion, four hundred ten sextillion or 1,410,000,000,000,000,000,000,000,000,000,000,000,000,000. 
+    - *It's approximately the estimated number of atoms in the observable universe, which is about 10^80. This comparison highlights the immense magnitude of such a number.*
+      - Note this is probably only true from Earth and doesn't take into account the universe revealed by the Webb space telescope. But alas we digress :-D
 
-So the fundemental challenge is that on each turn you have to compute the best next move given the information at hand while minimizing the size of the search tree.
+So the fundemental challenge is that on each turn you have to compute the best next move given the information at hand while drastically minimizing the size of the search tree and thus time to a solution.
 
-## My general approach
-I approached this problem by first ensuring I understood how the online simulator works, i.e., how it interpretes the use of the six possible moves per turn.
-
-To do this I built a `simulation_tester.py` module which is functionally similar to the online one - even in how it uses operating system pipes to communicate with the child process that hosts the client AI.
-
-The online site provides a series of test cases that you can use to test your AI.  I encoded those test cases in my `simulations.py` module which is used by my `simulation_tester.py` module. This allowed me to iterate on my AI locally without having to use the online site. I considered that necessary in order to be able to debug my AI, but also to be able to test my AI with shorter and custom test cases.
-
-As a general rule I try to use docker containeration to build environments for my projects. This repo contains documentation for my docker setup.
-
-- [Docker instructions](documentation/docker.md)
-
-## My solution
+## Deeper dive
+- [My general approach](documentation/approach.md)
 - [My solution](documentation/solution.md)
-
 
 ## Directory of project files
 | File | Description |
