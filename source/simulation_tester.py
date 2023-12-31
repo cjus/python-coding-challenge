@@ -9,21 +9,7 @@ import fcntl
 import subprocess
 
 from simulator import Simulator, SimulatorState, SimulatorCommand
-
-from simulations import (
-    simulation1,
-    simulation2,
-    simulation3,
-    simulation4,
-    simulation5,
-    simulation6,
-    simulation7,
-    simulation8,
-    simulation9,
-    simulation10,
-    simulation11,
-    simulation12,
-)
+from simulations import SIM_TESTS
 from bike_ai import Bike_AI
 
 COMMAND_TO_INT = {
@@ -35,6 +21,10 @@ COMMAND_TO_INT = {
     "DOWN": SimulatorCommand.COMMAND_DOWN,
     "SLOW": SimulatorCommand.COMMAND_SLOW,
 }
+
+
+def num_with_commas(num):
+    return f"{num:,}".replace(".", ",")
 
 
 def send_simulation_initial_data(process, data):
@@ -53,41 +43,68 @@ def send_simulation_data(process, state, speed):
     process.stdin.flush()
 
 
-def run_simulation(commands, data):
-    print(f"[{data['name'].upper()}]\n")
-
+def output_steps(commands, data):
     sim = Simulator(data)
 
     state = SimulatorState(None)
-    state.remaining_bikes = sim.total_bikes
     state.speed = data["speed"]
+    state.remaining_bikes = data["remaining_bikes"]
     for bike in data["bikes"]:
         state.bikes.append(bike.copy())
 
     sim.render(state)
 
     for i in range(len(commands)):
-        if i != 0:
-            state = state.clone()
-            state.command = COMMAND_TO_INT[commands[i]]
-            print(f"Processing: {commands[i]}")
-            state = sim.process(state)
-            sim.render(state)
-            if state.game_over:
-                print("GAME OVER")
-                print(f"Bikes accross bridge: {state.remaining_bikes}")
-                if state.remaining_bikes < int(data["required"]):
-                    print(f"Your mission was not successful.\n")
-                else:
-                    print(f"Congratuations, your mission was successful!\n")
-                break
+        state = state.clone()
+        state.command = COMMAND_TO_INT[commands[i]]
+        print(f"Processing: {commands[i]}")
+        state = sim.process(state)
+        sim.render(state)
+        if state.game_over:
+            print("GAME OVER")
+            print(f"Bikes accross bridge: {state.remaining_bikes}")
+            if state.remaining_bikes < int(data["required"]):
+                print(f"Your mission was not successful.\n")
+            else:
+                print(f"Congratuations, your mission was successful!\n")
+            break
 
 
-def num_with_commas(num):
-    return f"{num:,}".replace(".", ",")
+def run_internal_sim(sim, data):
+    print(f"\nStarting Bike_AI on {sim.name}\n")
+    bike_ai = Bike_AI(sim, use_graphviz=False, debug=True)
+    step_data = {
+        "speed": data["speed"],
+        "remaining_bikes": data["required"],
+        "bikes": data["bikes"],
+    }
+    step_data["speed"] = data["speed"]
+    step_data["bikes"] = data["bikes"]
+    # step_data["speed"] = 4
+    # step_data["bikes"] = [
+    #     [9, 0, 1],
+    #     [9, 1, 1],
+    #     [9, 2, 1],
+    #     [9, 3, 1],
+    # ]
+    winning_line = bike_ai.process_move(step_data)
+
+    print(f"\nBike_AI elapsed time: {round(bike_ai.get_elapsed_time(),2)} seconds.")
+    print(
+        f"Examined a total of {num_with_commas(bike_ai.node_id)} nodes out of a maximum possible {num_with_commas(bike_ai.get_maximum_nodes())} nodes by depth: {bike_ai.max_depth_reached}"
+    )
+    print(f"Winning line is: {bike_ai.get_winning_line()}\n")
+
+    winning_line.pop()
+
+    reset_data = data
+    reset_data["remaining_bikes"] = data["total_bikes"]
+    reset_data["bikes"] = step_data["bikes"]
+    reset_data["speed"] = step_data["speed"]
+    output_steps(winning_line, reset_data)
 
 
-def main():
+def run_external_sim(sim, data):
     process = subprocess.Popen(
         ["python3", "./main.py"],
         stdin=subprocess.PIPE,
@@ -101,41 +118,15 @@ def main():
     fl = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-    data = simulation2()
-    sim = Simulator(data)
-
-    # run_simulation(["", 'DOWN', 'SPEED', 'UP', 'JUMP', 'DOWN', 'SPEED', 'SPEED'], data)
-
-    print(f"\nStarting Bike_AI on {sim.name}\n")
-    bike_ai = Bike_AI(sim, False, True)
-    data = {
-        "speed": data["speed"],
-        "remaining_bikes": data["required"],
-        "bikes": data["bikes"],
-    }
-    data["speed"] = 2
-    data["bikes"] = [
-            [1, 0, 1],
-            [1, 1, 1],
-            [1, 2, 1],
-            [1, 3, 1],
-        ]
-    winning_line = bike_ai.process_move(data)
-
-    print(f"\nBike_AI elapsed time: {round(bike_ai.get_elapsed_time(),2)} seconds.")
-    print(
-        f"Examined a total of {num_with_commas(bike_ai.node_id)} nodes out of a maximum possible {num_with_commas(bike_ai.get_maximum_nodes())} nodes by depth: {bike_ai.max_depth_reached}"
-    )
-    print(f"Winning line is: {bike_ai.get_winning_line()}\n")
-
     state = SimulatorState(None)
     state.remaining_bikes = sim.total_bikes
     for bike in data["bikes"]:
         state.bikes.append(bike.copy())
+    current_speed = data["speed"]
+    state.speed = current_speed
     send_simulation_initial_data(process, data)
     sim.render(state)
 
-    current_speed = data["speed"]
     while True:
         send_simulation_data(process, state, current_speed)
 
@@ -171,6 +162,14 @@ def main():
     except:
         pass
     print("\n")
+
+
+def main():
+    data = SIM_TESTS.simulation1()
+    sim = Simulator(data)
+
+    #run_internal_sim(sim, data)
+    run_external_sim(sim, data)
 
 
 if __name__ == "__main__":

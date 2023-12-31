@@ -26,15 +26,6 @@ class Bike_AI:
         "WAIT",
     ]
 
-    commands = [
-        "SPEED",
-        "UP",
-        "SPEED",
-        "SPEED",
-    ]
-
-    command_index = 0
-
     def __init__(self, simulator, use_graphviz=False, debug=False, full_search=False):
         self.start = time.time()
         self.simulator = simulator

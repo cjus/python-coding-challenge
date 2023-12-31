@@ -1,6 +1,7 @@
 __pycache__
 .DS_Store
-*.pdf
+bikes.gv
+bikes.gv.pdf
 *.gv
 *.vscode
 

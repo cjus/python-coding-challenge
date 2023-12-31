@@ -72,14 +72,10 @@ def main():
             debug("Exit: no more active_bikes")
             break
 
-        # state = SimulatorState(None)
-        # state.remaining_bikes = remaining_bikes
-        # for bike in run_data["bikes"]:
-        #     state.bikes.append(bike.copy())
-
         sim_data["total_bikes"] = remaining_bikes
+        sim_data["speed"] = s
         sim = Simulator(sim_data)
-        bike_ai = Bike_AI(sim, False, False, False)
+        bike_ai = Bike_AI(sim, use_graphviz=False, debug=False)
         winning_moves = bike_ai.process_move(run_data)
         winning_moves.pop()  # remove last move which is the branch score
         debug(f"winning_moves: {winning_moves}")
