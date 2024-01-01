@@ -1,6 +1,6 @@
 # My Solution
 
-These types of challenges require the use of a search algorithm to compute the best next move for each turn based on the current state of the game. This is commonly done using a search state tree of possible moves and then uses a heuristic to determine the best move.  
+These types of challenges require the use of a search algorithm to compute the best next move for each turn based on the current state of the game. This is commonly done using a search tree consisting of possible moves and the uses a heuristic to determine the best move.  
 
 In my solution when a winning move is found it's returned immediately. Even if it's not the best move. This is necessary because the simulation will terminate the game if the AI doesn't return a move within a certain amount of time. That said, my solution has a `full_search` flag on the `Bike_AI` class that will force the AI to search the entire tree before returning a move. This is useful for debugging and testing but can't be used in production.
 
@@ -28,19 +28,21 @@ The heuristic scores a potential move based on the number of bikes remaining aft
 
 The best score identified is then used to eliminate all other potential moves that have a lower score.  This is a common technique, called [alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning), that is used to reduce the size of the search trees.
 
-## Graphviz
+## Useful tools
+#### Graphviz
 Early on I wanted to visualize the search tree to help me debug and understand the AI's behavior.  I used the [graphviz](https://graphviz.org/) library to generate a graph of the search tree. I build the `graphviz.py` wrapper module for this purpose.  The `Bike_AI` class has a `use_graphviz` flag that can be used to enable/disable the graphviz graph generation. Note that after about 5-10 turns the graph becomes too large to be useful.  This is where I generated custom test cases to help limit the size of the graph.
 
 ![Graphviz graph of the search tree](./search-tree.png)
 
 > A PDF of a larger graph can be found [here](./search-tree.pdf). Note you'll need a PDF viewer that allows you to zoom in to see the details.
 
-## Apple Freeform
+#### Apple Freeform
 I also used [Apple's Freeform](https://apps.apple.com/us/app/freeform/id6443742539) to visually think through challenges using a digital whiteboard.
 
 ![Apple Freeform visualization of moves](./apple-freeform.png)
 
 ## Core AI files
+The following files make up the core AI.
 
 | File | Description |
 | --- | --- |

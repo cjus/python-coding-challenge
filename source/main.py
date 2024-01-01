@@ -1,13 +1,7 @@
 #!/usr/bin/python3
 
 """
-BOBNET - THE BRIDGE
-Excellent work! Thanks to you, we have managed to hijack four motorbikes! Their source code has been modified to carry our virus back to Bobnet.
-
-Bobnet's headquarters are on the other end of the next bridge, but a recent acid rain storm has gravely damaged the structural integrity of the road, leaving it scattered with many holes.
-The motorbikes are perfectly capable of crossing the damaged bridge but, because of our virus, it's up to you to code the evasive maneuvers of the motorbikes.
-
-Humankind is relying on you to see as many motorbikes safely across the bridge as possible!
+This is the client program that hosts the AI and receives inputs from the game simulator.
 """
 import sys
 from bike_ai import Bike_AI

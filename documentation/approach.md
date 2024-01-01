@@ -7,6 +7,8 @@ The online site provides a series of test cases that you can use to test your AI
 
 Personally, I like to use docker containerized environments and Visual Studio Code's remote development features to build my projects.  This allows me to use my local IDE and tools while still having a consistent environment for my projects.
 
+- [Docker instructions](documentation/docker.md)
+
 ## Simulation console output
 
 By building a local simulation tester I was able to capture the console output of the simulation.  This allowed me to see the state of the game at each turn and to see the moves that were being made by my AI.  This was very helpful in debugging my AI.
@@ -252,5 +254,3 @@ Congratuations, your mission was successful!
 ```
 
 So in summary, the `simulation_tester.py` module was very helpful in debugging my AI and in understanding how the online simulator works.
-
-- [Docker instructions](documentation/docker.md)
