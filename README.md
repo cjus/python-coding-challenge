@@ -1,8 +1,8 @@
 # A Coding Challenge
 
-I recently applied for a job that asked whether I'd be willing to complete a coding challenge. åThe challenge was hosted on a a programming site with the following description (note I've changed the wording to protect the challenge for future developers):
+I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge in question was marked as hard on the programming site and only 26% of the developers who attempted it have been able to solve it. I score 100% - but I don't say that to brag.  The problem took me quite some time and effort to complete.  The reason is that it's a computer science problem and I don't have a formal computer science education.  Although, I do have past game programming experience including in Chess AI - but that was also a long time ago!
 
-It's the sort of problem that reminds you of all those things you learned in school but never thought you'd use in the real world. It's also the sort of problem that you can't brute force your way through. You have to think about the problem and come up with a solution that is both efficient and effective.
+The challenge requires the use of data structures and algorithms to solve, involving the use of a search algorithm and search tree data structure. Due to the complexity of the problem, it's not possible to brute force your way through it. The use of alpha-beta pruning is also required to solve the problem in real-time.
 
 **Quick summary**
 - You have a four lane bridge with one to four bikes at the start of the bridge.
