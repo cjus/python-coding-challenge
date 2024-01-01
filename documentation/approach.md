@@ -257,3 +257,5 @@ Congratuations, your mission was successful!
 ```
 
 So in summary, the `simulation_tester.py` module was very helpful in debugging my AI and in understanding how the online simulator works.
+
+> ⤴️ [README.md](../README.md#how-i-addressed-this-challenge)
