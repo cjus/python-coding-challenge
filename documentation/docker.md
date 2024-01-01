@@ -1,5 +1,7 @@
 # Docker instructions
 
+> ⤴️ [README.md](../README.md)
+
 > Note that these instructions are for my Mac M1.  I haven't tested on my Windows machine just yet. See the [build.sh](python-dev/build.sh) shell script for more information and sense of how to create a windows powershell equivalent.
 
 ## Prerequisites
