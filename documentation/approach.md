@@ -74,7 +74,7 @@ Speed: 2
 ....2.......x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 ```
 
-Bike #2 continues on to position 7. In the next outputs we see bike #2 continue its progression accross the bridge.
+Bike #2 continues on to position 7. In the next outputs we see bike #2 continue its progression across the bridge.
 
 ```shell
 Processing: SPEED
@@ -252,7 +252,7 @@ Speed: 6
 ............x.xxxxxx...........xxxx...............x.x.....xxxxxx.
 
 GAME OVER
-Bikes accross bridge: 1
+Bikes across bridge: 1
 Congratuations, your mission was successful!
 ```
 

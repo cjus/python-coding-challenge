@@ -15,7 +15,7 @@ Therefore, the challenge requires the application of computer science concepts s
 
 **Quick summary**
 - You have a four lane bridge with one to four bikes at the start of the bridge.
-- Your goal is to get a minimum number of bikes accross the bridge.
+- Your goal is to get a minimum number of bikes across the bridge.
 - To complicate matters the bridge has pot holes that bikes have to navigate by moving left or right or jumping over them.
 - Your challenge is to write a game AI that can get at least the minimum number of bikes accross the bridge.
 - The programming site provides you a turn-based simulation that will allow you to test your AI.
@@ -27,7 +27,7 @@ See: [Deeper summary of the core challenges](documentation/deeper-summary.md)
 - [My solution](documentation/solution.md)
 
 ## Further thoughts
-Given more free time I'd like to implement a version that uses a distributed search accross multiple CPU cores. Although, I do think that would be overkill for this problem. It's just a bit painful to realize that only one of my machine's 10 cores was working on the problem.
+Given more free time I'd like to implement a version that uses a distributed search across multiple CPU cores. Although, I do think that would be overkill for this problem. It's just a bit painful to realize that only one of my machine's 10 cores was working on the problem.
 
 ## Directory of project files
 | File | Description |

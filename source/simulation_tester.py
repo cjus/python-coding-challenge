@@ -62,7 +62,7 @@ def output_steps(commands, data):
         sim.render(state)
         if state.game_over:
             print("GAME OVER")
-            print(f"Bikes accross bridge: {state.remaining_bikes}")
+            print(f"Bikes across bridge: {state.remaining_bikes}")
             if state.remaining_bikes < int(data["required"]):
                 print(f"Your mission was not successful.\n")
             else:
@@ -142,7 +142,7 @@ def run_external_sim(sim, data):
 
         if state.game_over or state.command == "":
             print("\nGAME OVER")
-            print(f"Bikes accross bridge: {state.remaining_bikes}")
+            print(f"Bikes across bridge: {state.remaining_bikes}")
             if state.remaining_bikes < int(data["required"]):
                 print(f"Your mission was not successful.\n")
             else:
