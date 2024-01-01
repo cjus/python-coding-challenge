@@ -2,7 +2,7 @@
 
 These types of challenges require the use of a search algorithm to compute the best next move for each turn based on the current state of the game. This is commonly done using a search tree consisting of possible moves and the uses a heuristic to determine the best move.  
 
-In my solution when a winning move is found it's returned immediately. Even if it's not the best move. This is necessary because the simulation will terminate the game if the AI doesn't return a move within a certain amount of time. That said, my solution has a `full_search` flag on the `Bike_AI` class that will force the AI to search the entire tree before returning a move. This is useful for debugging and testing but can't be used in production.
+In my solution when a winning move is found it's returned immediately. Even if it's not the best move. This is necessary because the simulation will terminate the game if the AI doesn't return a move within a certain amount of time. That said, my solution has a `full_search` flag on the `Bike_AI` class that will force the AI to search the entire tree before returning a move. That was useful for debugging and testing but can't be used in production.
 
 ```python
 Bike_AI(simulator, use_graphviz=False, debug=False, full_search=False)
@@ -10,7 +10,7 @@ Bike_AI(simulator, use_graphviz=False, debug=False, full_search=False)
 
 ## Depth first search
 
-I used a [depth first search algorithm](https://en.wikipedia.org/wiki/Depth-first_search) to build the search tree.  This is a common approach for these types of problems.  It's particularily important in my solution because this allows for a move sequence to be evaluated and for the evaluation score to potentially be used to eliminate other potential moves.
+I used a [depth first search algorithm](https://en.wikipedia.org/wiki/Depth-first_search) to build the search tree.  This is a common approach for these types of problems.  It's particularily important in my solution because this allows for a move sequence to be evaluated and for the evaluation score to be used to eliminate other potential moves.
 See my note on `alpha-beta pruning` below.
 
 ## The heuristic
@@ -30,7 +30,7 @@ The best score identified is then used to eliminate all other potential moves th
 
 ## Useful tools
 #### Graphviz
-Early on I wanted to visualize the search tree to help me debug and understand the AI's behavior.  I used the [graphviz](https://graphviz.org/) library to generate a graph of the search tree. I build the `graphviz.py` wrapper module for this purpose.  The `Bike_AI` class has a `use_graphviz` flag that can be used to enable/disable the graphviz graph generation. Note that after about 5-10 turns the graph becomes too large to be useful.  This is where I generated custom test cases to help limit the size of the graph.
+Early on I wanted to visualize the search tree to help me debug and understand the AI's behavior.  I used the [graphviz](https://graphviz.org/) library to generate a graph of the search tree. I built the `graphviz.py` wrapper module for this purpose.  The `Bike_AI` class has a `use_graphviz` flag that can be used to enable/disable the graphviz graph generation. Note that after about 5-10 turns the graph becomes too large to be useful.  This is where I generated custom test cases to help limit the size of the graph.
 
 ![Graphviz graph of the search tree](./search-tree.png)
 

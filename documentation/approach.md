@@ -3,9 +3,9 @@ I approached this problem by first ensuring I understood how the online simulato
 
 To do this I first built a `simulation_tester.py` module which is functionally similar to the online one - even in how it uses operating system pipes to communicate with the child process that hosts the client AI.
 
-The online site provides a series of test cases that you can use to test your AI.  I encoded those test cases in my `simulations.py` module which is used by my `simulation_tester.py` module. This allowed me to iterate on my AI locally without having to use the online site. I considered that necessary in order to be able to debug my AI, but also to be able to test my AI with shorter and custom test cases.
+The online site provides a series of test cases that I used to test my AI.  I encoded those test cases in the `simulations.py` module which is used by the `simulation_tester.py` module. This allowed me to iterate on my AI locally without having to use the online site. I considered that necessary in order to be able to debug my AI, but also to be able to test my AI with shorter and custom test cases.
 
-Personally, I like to use docker containerized environments and Visual Studio Code's remote development features to build my projects.  This allows me to use my local IDE and tools while still having a consistent environment for my projects.
+Personally, I like to use docker containerized environments and Visual Studio Code's remote development features to work on projects.  This allows me to use my local IDE and tools while still having a consistent environment.
 
 - [Docker instructions](documentation/docker.md)
 
@@ -15,9 +15,9 @@ By building a local simulation tester I was able to capture the console output o
 
 ![Console output of simulation tester](./console-out-01.png)
 
-In the above example we see that an earlier version of the AI found two winning moves but took 70 seconds to do so on a Mac M1 MAX Pro. Part of the problem was that it had to create and evaluate 2.9 millions nodes out of a possible 12 million nodes at the 9th ply.
+In the above example we see that an earlier version of the AI found two winning moves but took 70 seconds to do so on a Mac M1 MAX Pro. Part of the problem was that it had to create and evaluate 2.9 million nodes out of a possible 12 million nodes by the 9th ply.
 
-In this next example, we see that an updated AI found the winning move in 0.0108 seconds by only evaluating 208 nodes out of a possible 731,231,688,012,594 nodes at the 19th ply.
+In this next (but differnt) example, we see that an updated AI found the winning move in 0.0108 seconds by only evaluating 208 nodes out of a possible 731,231,688,012,594 nodes at the 19th ply.
 
 ```shell
 Starting Bike_AI on Sim 12

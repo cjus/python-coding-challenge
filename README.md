@@ -1,6 +1,6 @@
 # A Coding Challenge
 
-I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge in question was marked as **hard** on the programming site and after what seems like 4 years only 26% of the developers who attempted it have been able to solve it.  I scored 100% - but I don't say that to brag.  After completing the test I could see solutions by my peers and mine is certainly not as elegant as some of the ones I saw.  Also, the problem took me quite some time and effort to complete.  The reason is that it's a computer science problem and I don't have a formal computer science education.  Although, I do have past game programming experience including in Chess AI - but that was also a long time ago!
+I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge in question was listed as **"hard"** on the programming site and after what seems like 4 years only 26% of the developers who attempted it have been able to solve it.  I scored 100% - but I don't say that to brag.  After completing the test I was able to view the solutions my peers created... and mine is certainly not as elegant as some of the ones I saw!  Also, the problem took me quite some time and effort to complete.  Part of the reason is that it's a computer science problem and I don't have a formal computer science education.  Although, I do have past game programming experience including in Chess AI - but that was also a long time ago!
 
 The challenge requires the application of computer science concepts such as [recursion](https://en.wikipedia.org/wiki/Recursion#:~:text=Recursion%20in%20computer%20programming%20is,simpler%20versions%20of%20the%20problem), [data structures](https://en.wikipedia.org/wiki/Data_structure) (particularily, [trees](https://en.wikipedia.org/wiki/Tree_(data_structure))) and search algorithms such as [depth first search](https://en.wikipedia.org/wiki/Depth-first_search) and [backtracking](https://en.wikipedia.org/wiki/Backtracking).   Due to the complexity of the problem, it's not possible to [brute force](https://en.wikipedia.org/wiki/Brute-force_search) a solution.  The use of [heuristics](https://en.wikipedia.org/wiki/Heuristic_(computer_science)) such as [alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning) are required to solve the problem in real-time.
 
@@ -33,7 +33,7 @@ So the fundemental challenge is that on each turn you have to compute the best n
 - [My solution](documentation/solution.md)
 
 ## Further thoughts
-Given more free time I would like to implement a version that uses a distributed search accross multiple CPU cores. Although, I think that would be overkill for this problem. It's just a bit painful to realize that only one of my 10 cores was working on the problem.
+Given more free time I'd like to implement a version that uses a distributed search accross multiple CPU cores. Although, I do think that would be overkill for this problem. It's just a bit painful to realize that only one of my machine's 10 cores was working on the problem.
 
 ## Directory of project files
 | File | Description |
