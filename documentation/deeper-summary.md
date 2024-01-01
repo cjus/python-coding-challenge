@@ -13,3 +13,5 @@
       - Note this is probably only true from Earth and doesn't take into account the universe revealed by the Webb space telescope. But alas we digress :-D
 
 So the fundemental challenge is that on each turn you have to compute the best next move given the information at hand while drastically minimizing the size of the search tree and thus time to a solution.
+
+> ⤴️ [README.md](../README.md#how-i-addressed-this-challenge)
