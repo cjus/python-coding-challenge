@@ -1,6 +1,6 @@
 # My Solution
 
-> ⤴️ [README.md](../README.md)
+> ⤴️ [README.md](../README.md#how-i-addressed-this-challenge)
 
 These types of challenges require the use of a search algorithm to compute the best next move for each turn based on the current state of the game. This is commonly done using a search tree consisting of possible moves and the uses a heuristic to determine the best move.  
 

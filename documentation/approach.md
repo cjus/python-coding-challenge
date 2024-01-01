@@ -1,6 +1,6 @@
 # My general approach
 
-> ⤴️ [README.md](../README.md)
+> ⤴️ [README.md](../README.md#how-i-addressed-this-challenge)
 
 I approached this problem by first ensuring I understood how the online simulator works, i.e., how it interpretes the use of the six possible moves per turn.
 

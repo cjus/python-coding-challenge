@@ -1,6 +1,7 @@
 # A deeper summary of the core challenges
 
-> ⤴️ [README.md](../README.md)
+> ⤴️ [README.md](../README.md#how-i-addressed-this-challenge)
+
 
 - During each turn (iteration on the game loop) you're given the updated position of your bikes and the speed they're traveling.
 - On each turn you must provide your next move.
