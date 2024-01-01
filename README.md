@@ -4,7 +4,7 @@ I recently applied for a job that asked whether I'd be willing to complete a cod
 
 I scored 100% - but I don't say that to brag.  After completing the test I was able to view the solutions my peers created... and mine is certainly not as elegant as some of the ones I saw!  That said, I'm still proud of my approach to a solution, and I thought it would be fun to share it here.
 
-The coe problem involves a turn-based simulation with six possible moves per turn and a potential of 30-50 turns. Thus, computing and storing all 1.41e+38 possible moves required to find the best move isn't feasible using a brute force search.
+The core problem involves a turn-based simulation with six possible moves per turn and a potential of 30-50 turns. Thus, computing and storing all 1.41e+38 possible moves required to find the best move isn't feasible using a brute force search.
 
 Therefore, the challenge requires the application of computer science concepts such as:
 

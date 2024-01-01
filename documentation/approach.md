@@ -1,4 +1,7 @@
 # My general approach
+
+> ⤴️ [README.md](../README.md)
+
 I approached this problem by first ensuring I understood how the online simulator works, i.e., how it interpretes the use of the six possible moves per turn.
 
 To do this I first built a `simulation_tester.py` module which is functionally similar to the online one - even in how it uses operating system pipes to communicate with the child process that hosts the client AI.
