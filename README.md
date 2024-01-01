@@ -1,8 +1,12 @@
 # A Coding Challenge
 
-I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge in question was marked as hard on the programming site and only 26% of the developers who attempted it have been able to solve it. I score 100% - but I don't say that to brag.  The problem took me quite some time and effort to complete.  The reason is that it's a computer science problem and I don't have a formal computer science education.  Although, I do have past game programming experience including in Chess AI - but that was also a long time ago!
+I recently applied for a job that asked whether I'd be willing to complete a coding challenge.  The challenge in question was marked as **hard** on the programming site and after what seems like 4 years only 26% of the developers who attempted it have been able to solve it.  I scored 100% - but I don't say that to brag.  After completing the test I could see solutions by my peers and mine is certainly not as elegant as some of the ones I saw.  Also, the problem took me quite some time and effort to complete.  The reason is that it's a computer science problem and I don't have a formal computer science education.  Although, I do have past game programming experience including in Chess AI - but that was also a long time ago!
 
-The challenge requires the use of data structures and algorithms to solve, involving the use of a depth first search algorithm and search tree data structure. Due to the complexity of the problem, it's not possible to brute force your way through it. The use of alpha-beta pruning is also required to solve the problem in real-time.
+The challenge requires the application of computer science concepts such as [recursion](https://en.wikipedia.org/wiki/Recursion#:~:text=Recursion%20in%20computer%20programming%20is,simpler%20versions%20of%20the%20problem), [data structures](https://en.wikipedia.org/wiki/Data_structure) (particularily, [trees](https://en.wikipedia.org/wiki/Tree_(data_structure))) and search algorithms such as [depth first search](https://en.wikipedia.org/wiki/Depth-first_search) and [backtracking](https://en.wikipedia.org/wiki/Backtracking).   Due to the complexity of the problem, it's not possible to [brute force](https://en.wikipedia.org/wiki/Brute-force_search) a solution.  The use of [heuristics](https://en.wikipedia.org/wiki/Heuristic_(computer_science)) such as [alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning) are required to solve the problem in real-time.
+
+> As a side note, even a family member's CS class at Dartmouth didn't seem to address all of those topics. Granted he may still encounter them later in his studies.
+
+In my solution I also built a simulator that closely models the one online.  The simulator, included in this repo, uses [unix system pipes](https://en.wikipedia.org/wiki/Pipeline_(Unix)) to communicate with the client application which hosts the game AI.  This wasn't required but I had time on my hands and having control of both ends of the problem made it easier to debug and test my solution.
 
 **Quick summary**
 - You have a four lane bridge with one to four bikes at the start of the bridge.
@@ -16,7 +20,7 @@ The challenge requires the use of data structures and algorithms to solve, invol
 - During each turn (iteration on the game loop) you're given the updated position of your bikes and the speed they're traveling.
 - On each turn you must provide your next move.
 - You can't take moves back once you've made them and when you lose a bike it's gone for good.
-- With six possible moves per turn and a potential of 30-50 turns, computing and storing all 1.41e+38 possible moves required to find the best move is not feasible using a [brute force search](https://en.wikipedia.org/wiki/Brute-force_search).
+- With six possible moves per turn and a potential of 30-50 turns, computing and storing all 1.41e+38 possible moves required to find the best move is not feasible using a brute force search.
   - According to ChatGPT: 
     - That's one quintillion, four hundred ten sextillion or 1,410,000,000,000,000,000,000,000,000,000,000,000,000,000. 
     - *It's approximately the estimated number of atoms in the observable universe, which is about 10^80. This comparison highlights the immense magnitude of such a number.*
@@ -27,6 +31,9 @@ So the fundemental challenge is that on each turn you have to compute the best n
 ## Deeper dive
 - [My general approach](documentation/approach.md)
 - [My solution](documentation/solution.md)
+
+## Further thoughts
+Given more free time I would like to implement a version that uses a distributed search accross multiple CPU cores. Although, I think that would be overkill for this problem. It's just a bit painful to realize that only one of my 10 cores was working on the problem.
 
 ## Directory of project files
 | File | Description |
